@@ -49,21 +49,4 @@ Output/front_garden_irrigation\ Release/Obj/nrfx_uart.o: \
  ../../../../../../components/libraries/util/sdk_errors.h \
  ../../../../../../components/libraries/util/sdk_resources.h \
  ../../../../../../components/softdevice/s132/headers/nrf_sd_def.h \
- ../../../../../../modules/nrfx/drivers/nrfx_errors.h \
- ../../../../../../modules/nrfx/drivers/include/nrfx_uart.h \
- ../../../../../../modules/nrfx/hal/nrf_uart.h \
- /home/sam/nRF5_SDK_15.3.0_59ac345/modules/nrfx/drivers/src/prs/nrfx_prs.h \
- ../../../../../../modules/nrfx/hal/nrf_gpio.h \
- ../../../../../../integration/nrfx/nrfx_log.h \
- ../../../../../../components/libraries/log/nrf_log.h \
- ../../../../../../components/libraries/util/sdk_common.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/string.h \
- ../../../../../../components/libraries/util/sdk_os.h \
- ../../../../../../components/libraries/util/app_util.h \
- ../../../../../../components/libraries/util/sdk_macros.h \
- ../../../../../../components/libraries/experimental_section_vars/nrf_section.h \
- ../../../../../../components/libraries/strerror/nrf_strerror.h \
- ../../../../../../components/libraries/log/src/nrf_log_internal.h \
- ../../../../../../components/libraries/log/nrf_log_instance.h \
- ../../../../../../components/libraries/log/nrf_log_types.h \
- ../../../../../../components/libraries/log/nrf_log_types.h
+ ../../../../../../modules/nrfx/drivers/nrfx_errors.h

@@ -1,5 +1,5 @@
 Output/front_garden_irrigation\ Debug/Obj/main.o: \
- /home/sam/nRF5_SDK_15.3.0_59ac345/examples/ble_peripheral/ble_app_front_garden-withbatfreq/main.c \
+ /home/sam/nRF5_SDK_15.3.0_59ac345/examples/ble_peripheral/battery-powered-ble-irrigation-controller-project-with-the-nRF52832/main.c \
  /usr/share/segger_embedded_studio_for_arm_4.12/include/stdint.h \
  /usr/share/segger_embedded_studio_for_arm_4.12/include/string.h \
  /usr/share/segger_embedded_studio_for_arm_4.12/include/__crossworks.h \
@@ -117,19 +117,8 @@ Output/front_garden_irrigation\ Debug/Obj/main.o: \
  ../../../../../../components/libraries/scheduler/app_scheduler.h \
  ../../../../../../components/ble/common/ble_conn_state.h \
  ../../../../../../components/libraries/atomic/nrf_atomic.h \
- ../../../../../../components/libraries/log/nrf_log.h \
- ../../../../../../components/libraries/experimental_section_vars/nrf_section.h \
- ../../../../../../components/libraries/strerror/nrf_strerror.h \
- ../../../../../../components/libraries/log/src/nrf_log_internal.h \
- ../../../../../../components/libraries/log/nrf_log_instance.h \
- ../../../../../../components/libraries/log/nrf_log_types.h \
- ../../../../../../components/libraries/log/nrf_log_types.h \
- ../../../../../../components/libraries/log/nrf_log_ctrl.h \
- ../../../../../../components/libraries/log/src/nrf_log_ctrl_internal.h \
- ../../../../../../components/libraries/log/nrf_log_backend_interface.h \
- ../../../../../../components/libraries/memobj/nrf_memobj.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stdlib.h \
- ../../../../../../components/libraries/balloc/nrf_balloc.h \
- ../../../../../../components/libraries/log/nrf_log_default_backends.h \
- /home/sam/nRF5_SDK_15.3.0_59ac345/examples/ble_peripheral/ble_app_front_garden-withbatfreq/ble_cus.h \
- /home/sam/nRF5_SDK_15.3.0_59ac345/examples/ble_peripheral/ble_app_front_garden-withbatfreq/ble_opt.h
+ ../../../../../../components/libraries/bsp/bsp_btn_ble.h \
+ ../../../../../../components/libraries/bsp/bsp.h \
+ ../../../../../../components/libraries/button/app_button.h \
+ /home/sam/nRF5_SDK_15.3.0_59ac345/examples/ble_peripheral/battery-powered-ble-irrigation-controller-project-with-the-nRF52832/ble_cus.h \
+ /home/sam/nRF5_SDK_15.3.0_59ac345/examples/ble_peripheral/battery-powered-ble-irrigation-controller-project-with-the-nRF52832/ble_opt.h

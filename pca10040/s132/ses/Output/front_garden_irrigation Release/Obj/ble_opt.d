@@ -1,5 +1,5 @@
 Output/front_garden_irrigation\ Release/Obj/ble_opt.o: \
- /home/sam/nRF5_SDK_15.3.0_59ac345/examples/ble_peripheral/ble_app_front_garden-withbatfreq/ble_opt.c \
+ /home/sam/nRF5_SDK_15.3.0_59ac345/examples/ble_peripheral/battery-powered-ble-irrigation-controller-project-with-the-nRF52832/ble_opt.c \
  ../../../../../../components/libraries/util/sdk_common.h \
  /usr/share/segger_embedded_studio_for_arm_4.12/include/stdint.h \
  /usr/share/segger_embedded_studio_for_arm_4.12/include/stdbool.h \
@@ -29,7 +29,7 @@ Output/front_garden_irrigation\ Release/Obj/ble_opt.o: \
  ../../../../../../components/softdevice/s132/headers/nrf_svc.h \
  ../../../../../../components/libraries/util/sdk_macros.h \
  ../../../../../../components/libraries/util/nrf_assert.h \
- /home/sam/nRF5_SDK_15.3.0_59ac345/examples/ble_peripheral/ble_app_front_garden-withbatfreq/ble_opt.h \
+ /home/sam/nRF5_SDK_15.3.0_59ac345/examples/ble_peripheral/battery-powered-ble-irrigation-controller-project-with-the-nRF52832/ble_opt.h \
  ../../../../../../components/softdevice/s132/headers/ble.h \
  ../../../../../../components/softdevice/s132/headers/nrf_svc.h \
  ../../../../../../components/softdevice/s132/headers/nrf_error.h \
