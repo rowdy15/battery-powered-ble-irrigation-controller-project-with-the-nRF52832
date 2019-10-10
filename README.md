@@ -4,8 +4,6 @@ Battery powered irrigation project to interface with the ESP32 microcontroller (
 
 The aim of this project is to create a solution for smart watering of plants that can be turned on from your phone when not at home, but that the irrigation controller only talks to an MQTT broker (in my case via an ESP32) which is on the home network and so the irrigation controller is not directly exposed to the cloud (internet).
 
-I tried to achieve the above solution initially to work with LoRa (arduino+RFM95), which worked, but decided to go with the BLE communication protocol, hence this project.
-
 The folders and files contained within this repo should be placed in the {sdk root}/examples/ble_peripheral/{name of your project} folder of the nRF5 SDK folder (see below for download). e.g. I have mine in a folder like so:
 
 /{nRF5 sdk root}/examples/ble_peripheral/battery-powered-irrigation-controller/{repo files and folders}
@@ -31,7 +29,7 @@ The characteristic in the first service holds the value for if the tap is on or 
 
 The characteristic in the second custom service holds the frequency with which the microcontroller will measure the battery level.  The code for battery measurement is in the main.c file (near the top after all the variable declarations).
 
-The code is setup so that the nRF52832 (peripheral) pairs once when turned on and will only connect this paired central device after this point.  This is reset every time the device restarts.  I have it like this as I don't have any buttons to cause a reset on my hardware.  In the working solution, the ESP32 is the "central" device, however you can use any BLE enabled device (phone) to do testing.
+The code is setup so that the nRF52832 (peripheral) pairs and stores bonding info for the first device that connects to it, when it is turned on and will only connect/reconnect this paired central device after this point.  This is reset every time button 1 (pin 14) is pressed for 1 second.  In the working solution, the ESP32 is the "central" device, however you can use any BLE enabled device (phone) to do testing.
 
 Some of the logic for the incoming BLE commands are in the ble_cus.c (tap state) and ble_opt.c (time left) files.
 
@@ -44,15 +42,17 @@ so the main files to manipulate are:
 * ble_opt.h
 * sdk_config.h
 
-if you want to change the pin assignments on your dev board that connect to the DC motor, then change the _TAP_1_ and _TAP_2_ variables
-
-If I had the time, I would implement the option to include a button on the hardware that resets the known (paired) device database to allow repairing.  In order to do this I would need to get some code from the *ble_app_blinky* example in the same *ble_peripheral* folder.  this example contains the LED Button Service structures that would make implementing this feature much easier.
+if you want to change the pin assignments on your dev board that connect to the DC motor, then change the _TAP_1_ and _TAP_2_ variables in the ble_cus.c file.
 
 ## NOTE: to achieve truly low power in the device, you need to disable the following in the sdk_config.h file (by defining them as zero):
 
 * \#define NRFX_UART_ENABLED 0
 * \#define UART_ENABLED 0
 * \#define NRF_LOG_BACKEND_UART_ENABLED 0
+
+in the codes current state, these are disabled and the nrf_drv_uart.c driver file has been removed and any reference to NRF logging has been commented out so it will compile.
+
+My initial testing seems to show that the chip is using 1.9μA when idle. :sunglasses::+1:
 
 ## Brief Outline of the Hardware setup:
 
