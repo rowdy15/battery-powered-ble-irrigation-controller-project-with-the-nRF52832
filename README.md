@@ -1,6 +1,6 @@
 # Battery Powered BLE Irrigation Controller Project Using the nRF52832
 
-Battery powered irrigation project to interface with the ESP32 microcontroller (see this project).
+Battery powered irrigation project to interface with the ESP32 microcontroller (see [this](https://github.com/rowdy15/ESP32-as-the-Central-BLE-Gateway-for-irrigation-controller) project).
 
 The aim of this project is to create a solution for smart watering of plants that can be turned on from your phone when not at home, but that the irrigation controller only talks to an MQTT broker (in my case via an ESP32) which is on the home network and so the irrigation controller is not directly exposed to the cloud (internet).
 
