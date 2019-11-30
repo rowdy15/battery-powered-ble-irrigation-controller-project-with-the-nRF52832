@@ -5,7 +5,7 @@ Output/front_garden_irrigation\ Release/Obj/SEGGER_RTT_Syscalls_SES.o: \
  /home/sam/nRF5_SDK_15.3.0_59ac345/external/segger_rtt/SEGGER_RTT_Conf.h \
  ../../../../../../components/libraries/util/nordic_common.h \
  ../../../../../../components/libraries/util/app_util_platform.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stdint.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stdint.h \
  ../../../../../../modules/nrfx/mdk/compiler_abstraction.h \
  ../../../../../../modules/nrfx/mdk/nrf.h \
  ../../../../../../modules/nrfx/mdk/nrf52.h \
@@ -26,15 +26,15 @@ Output/front_garden_irrigation\ Release/Obj/SEGGER_RTT_Syscalls_SES.o: \
  ../../../../../../components/softdevice/s132/headers/nrf_nvic.h \
  ../../../../../../components/libraries/util/nrf_assert.h \
  ../../../../../../components/libraries/util/app_error.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stdio.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/__crossworks.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stdbool.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stdio.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/__crossworks.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stdbool.h \
  ../../../../../../components/libraries/util/sdk_errors.h \
  ../../../../../../components/softdevice/s132/headers/nrf_error.h \
  ../../../../../../components/libraries/util/nordic_common.h \
  ../../../../../../components/libraries/util/app_error_weak.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stdarg.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/limits.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/__libc.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/__vfprintf.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/__argtype.h
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stdarg.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/limits.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/__libc.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/__vfprintf.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/__argtype.h

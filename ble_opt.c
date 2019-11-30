@@ -51,69 +51,77 @@ static void on_disconnect(ble_option_t * p_opt, ble_evt_t const * p_ble_evt)
 static void on_write(ble_option_t * p_opt, ble_evt_t const * p_ble_evt)
 {
     ble_gatts_evt_write_t const * p_evt_write = &p_ble_evt->evt.gatts_evt.params.write;
+    SEGGER_RTT_WriteString(0, "There has been an on write event\n");
     
     // Custom Value Characteristic Written to.
     if (p_evt_write->handle == p_opt->custom_value_handles.value_handle)
     {
         ble_opt_evt_t evt;  
         
-        if(*p_evt_write->data == 0x01)
-        {      
-          evt.evt_type = BLE_OPT_BAT_CHECK_10_MIN;
-        } else if(*p_evt_write->data == 0x02)
-        {
-          evt.evt_type = BLE_OPT_BAT_CHECK_30_MIN;
-        }else if(*p_evt_write->data == 0x03)
-        {
-          evt.evt_type = BLE_OPT_BAT_CHECK_1_HR;
-        }else if(*p_evt_write->data == 0x04)
-        {
-          evt.evt_type = BLE_OPT_BAT_CHECK_6_HR;
-        }else if(*p_evt_write->data == 0x05)
-        {
-          evt.evt_type = BLE_OPT_BAT_CHECK_12_HR;
-        }else if(*p_evt_write->data == 0x06)
-        {
-          evt.evt_type = BLE_OPT_BAT_CHECK_24_HR;
-        }
-        else
-        {
-        evt.evt_type = BLE_OPT_BAT_CHECK_1_HR;
-          //Do nothing
-        }
+        switch (*p_evt_write->data){
+          case 0:
+            evt.evt_type = BLE_OPT_BAT_CHECK_1_MIN;
+            break;
+          case 1:
+            evt.evt_type = BLE_OPT_BAT_CHECK_1_MIN;
+            break;
+          case 2:
+              evt.evt_type = BLE_OPT_BAT_CHECK_10_MIN;
+              break;
+          case 3:
+              evt.evt_type = BLE_OPT_BAT_CHECK_30_MIN;
+              break;
+          case 4:
+              evt.evt_type = BLE_OPT_BAT_CHECK_1_HR;
+              break;
+          case 5:
+              evt.evt_type = BLE_OPT_BAT_CHECK_6_HR;
+              break;
+          case 6:
+              evt.evt_type = BLE_OPT_BAT_CHECK_12_HR;
+              break;
+          case 7:
+              evt.evt_type = BLE_OPT_BAT_CHECK_24_HR;
+              break;
+          default:
+            // No implementation needed.
+            evt.evt_type = BLE_OPT_BAT_CHECK_24_HR;
+            break;
+         }
         
-        p_opt->evt_handler(p_opt, &evt);
+          p_opt->evt_handler(p_opt, &evt);
     }
 
 //    // Check if the Custom value CCCD is written to and that the value is the appropriate length, i.e 2 bytes.
-//    if ((p_evt_write->handle == p_opt->custom_value_handles.cccd_handle) && (p_evt_write->len == 2) )
-//    {
-//        // CCCD written, call application event handler
-//        if (p_opt->evt_handler != NULL)
-//        {
-//            ble_opt_evt_t evt;
-//
-//            if (ble_srv_is_notification_enabled(p_evt_write->data))
-//            {
-//                evt.evt_type = BLE_OPT_EVT_NOTIFICATION_ENABLED;
-//            }
-//            else
-//            {
-//                evt.evt_type = BLE_OPT_EVT_NOTIFICATION_DISABLED;
-//            }
-//
-//            // Call the application event handler.
-//            p_opt->evt_handler(p_opt, &evt);
-//        }
-//    }
+    if ((p_evt_write->handle == p_opt->custom_value_handles.cccd_handle) && (p_evt_write->len == 2) )
+    {
+        // CCCD written, call application event handler
+        if (p_opt->evt_handler != NULL)
+        {
+            ble_opt_evt_t evt;
 
+            if (ble_srv_is_notification_enabled(p_evt_write->data))
+            {
+                evt.evt_type = BLE_OPT_EVT_NOTIFICATION_ENABLED;                
+            }
+            else
+            {
+                evt.evt_type = BLE_OPT_EVT_NOTIFICATION_DISABLED;                
+            }
+
+            // Call the application event handler.
+            p_opt->evt_handler(p_opt, &evt);
+        }
+    }
 }
+
 
 void ble_opt_on_ble_evt( ble_evt_t const * p_ble_evt, void * p_context)
 {
     ble_option_t * p_opt = (ble_option_t *) p_context;
     
     NRF_LOG_INFO("BLE event received. Event type = %d\r\n", p_ble_evt->header.evt_id); 
+    //SEGGER_RTT_printf(0,"BLE event received. Event type = %d\n",p_ble_evt->header.evt_id);
     if (p_opt == NULL || p_ble_evt == NULL)
     {
         return;
@@ -130,6 +138,7 @@ void ble_opt_on_ble_evt( ble_evt_t const * p_ble_evt, void * p_context)
             break;
 
         case BLE_GATTS_EVT_WRITE:
+            SEGGER_RTT_WriteString(0, "the battery frequency characteristic has been written to \n");
             on_write(p_opt, p_ble_evt);
             break;
 /* Handling this event is not necessary
@@ -173,8 +182,8 @@ static uint32_t custom_value_char_add(ble_option_t * p_opt, const ble_option_ini
 
     char_md.char_props.read   = 1;
     char_md.char_props.write  = 1;
-    char_md.char_props.notify = 0; 
-    char_md.p_char_user_desc  = NULL;
+    char_md.char_props.notify = 1; 
+    char_md.p_char_user_desc  = "battery_frequency";
     char_md.p_char_pf         = NULL;
     char_md.p_user_desc_md    = NULL;
     char_md.p_cccd_md         = &cccd_md; 
@@ -211,9 +220,6 @@ static uint32_t custom_value_char_add(ble_option_t * p_opt, const ble_option_ini
 
 uint32_t ble_option_init(ble_option_t * p_opt, const ble_option_init_t * p_opt_init)
 {
-
-
-
     if (p_opt == NULL || p_opt_init == NULL)
     {
         return NRF_ERROR_NULL;
@@ -247,79 +253,138 @@ uint32_t ble_option_init(ble_option_t * p_opt, const ble_option_init_t * p_opt_i
     APP_ERROR_CHECK(err_code); 
 }
 
-//uint32_t ble_opt_custom_value_update(ble_option_t *p_opt)
-//{       
-//    NRF_LOG_INFO("In ble_opt_custom_value_update. \r\n"); 
+uint32_t ble_opt_notify_client(ble_option_t *p_opt)
+{       
+    NRF_LOG_INFO("In ble_opt_custom_value_update. \r\n"); 
+    SEGGER_RTT_WriteString(0, "sending notification of battery frequency change \n");
+    if (p_opt == NULL)
+    {
+        return NRF_ERROR_NULL;
+    }
+
+    uint32_t err_code = NRF_SUCCESS;
+    uint8_t btry_chk_frqcy; 
+    ble_gatts_value_t gatts_value;
+    
+    // Initialize value struct.
+    memset(&gatts_value, 0, sizeof(gatts_value));
+
+    gatts_value.len     = sizeof(uint8_t);
+    gatts_value.offset  = 0;
+    gatts_value.p_value = &btry_chk_frqcy;
+
+    err_code = sd_ble_gatts_value_get(BLE_CONN_HANDLE_INVALID, p_opt->custom_value_handles.value_handle, &gatts_value);
+    APP_ERROR_CHECK(err_code);
+   
+    if ((p_opt->conn_handle != BLE_CONN_HANDLE_INVALID)) 
+    {
+        ble_gatts_hvx_params_t hvx_params;
+
+        memset(&hvx_params, 0, sizeof(hvx_params));
+
+        hvx_params.handle = p_opt->custom_value_handles.value_handle;
+        hvx_params.type   = BLE_GATT_HVX_NOTIFICATION;
+        hvx_params.offset = gatts_value.offset;
+        hvx_params.p_len  = &gatts_value.len;
+        hvx_params.p_data = gatts_value.p_value;
+
+        err_code = sd_ble_gatts_hvx(p_opt->conn_handle, &hvx_params);
+        NRF_LOG_INFO("sd_ble_gatts_hvx result: %x. \r\n", err_code);
+         SEGGER_RTT_printf(0, "sd_ble_gatts_hvx result: %x. \n", err_code);
+    }
+    else
+    {
+        err_code = NRF_ERROR_INVALID_STATE;
+        NRF_LOG_INFO("sd_ble_gatts_hvx result: NRF_ERROR_INVALID_STATE. \r\n"); 
+        SEGGER_RTT_WriteString(0, "sd_ble_gatts_hvx result: NRF_ERROR_INVALID_STATE. \n");
+    }
+
+
+
+    return err_code;
+}
+
+
+//ret_code_t ble_opt_battery_frequency_update(ble_option_t * p_opt, uint8_t     battery_frequency, uint16_t    conn_handle)
+//{
 //    if (p_opt == NULL)
 //    {
 //        return NRF_ERROR_NULL;
 //    }
 //
-//    uint32_t err_code = NRF_SUCCESS;
-//    uint8_t tap_minutes_left; 
-//    ble_gatts_value_t gatts_value;
-//    
+//    ret_code_t         err_code = NRF_SUCCESS;
+//    ble_gatts_value_t  gatts_value;
+//
 //    // Initialize value struct.
 //    memset(&gatts_value, 0, sizeof(gatts_value));
 //
 //    gatts_value.len     = sizeof(uint8_t);
 //    gatts_value.offset  = 0;
-//    gatts_value.p_value = &tap_minutes_left;
-//
-//    err_code = sd_ble_gatts_value_get(BLE_CONN_HANDLE_INVALID, p_opt->custom_value_handles.value_handle, &gatts_value);
-//    APP_ERROR_CHECK(err_code);
-//
-//    tap_minutes_left -= 1;
+//    gatts_value.p_value = &battery_level;
 //
 //    // Update database.
-//    err_code = sd_ble_gatts_value_set(p_opt->conn_handle, p_opt->custom_value_handles.value_handle, &gatts_value);
-//    if (err_code != NRF_SUCCESS)
+//    err_code = sd_ble_gatts_value_set(BLE_CONN_HANDLE_INVALID,
+//                                      p_bas->battery_level_handles.value_handle,
+//                                      &gatts_value);
+//    if (err_code == NRF_SUCCESS)
 //    {
+//        NRF_LOG_INFO("Battery level has been updated: %d%%", battery_level)
+//
+//        // Save new battery value.
+//        p_bas->battery_level_last = battery_level;
+//    }
+//    else
+//    {
+//        NRF_LOG_DEBUG("Error during battery level update: 0x%08X", err_code)
+//
 //        return err_code;
 //    }
-// 
 //
-//    //SEGGER_RTT_printf(0, "The tap gatts value is %d!\n",gatts_value.p_value);
-//
-//    if(tap_minutes_left == 0x00) {   // if tap value is zero
-//    {
-//      SEGGER_RTT_printf(0, "The tap has has been switched off!\n",tap_minutes_left);
-//    }
-//    } else {
-//      SEGGER_RTT_printf(0, "The tap is switched on and has %d minutes left!\n",tap_minutes_left);
-//          // Send value if connected and notifying.
-//      
-//    }
-//
-//    
-//    if ((p_opt->conn_handle != BLE_CONN_HANDLE_INVALID)) 
+//    // Send value if connected and notifying.
+//    if (p_bas->is_notification_supported)
 //    {
 //        ble_gatts_hvx_params_t hvx_params;
 //
 //        memset(&hvx_params, 0, sizeof(hvx_params));
 //
-//        hvx_params.handle = p_opt->custom_value_handles.value_handle;
+//        hvx_params.handle = p_bas->battery_level_handles.value_handle;
 //        hvx_params.type   = BLE_GATT_HVX_NOTIFICATION;
 //        hvx_params.offset = gatts_value.offset;
 //        hvx_params.p_len  = &gatts_value.len;
 //        hvx_params.p_data = gatts_value.p_value;
 //
-//        err_code = sd_ble_gatts_hvx(p_opt->conn_handle, &hvx_params);
-//        NRF_LOG_INFO("sd_ble_gatts_hvx result: %x. \r\n", err_code); 
+//        if (conn_handle == BLE_CONN_HANDLE_ALL)
+//        {
+//            ble_conn_state_conn_handle_list_t conn_handles = ble_conn_state_conn_handles();
+//
+//            // Try sending notifications to all valid connection handles.
+//            for (uint32_t i = 0; i < conn_handles.len; i++)
+//            {
+//                if (ble_conn_state_status(conn_handles.conn_handles[i]) == BLE_CONN_STATUS_CONNECTED)
+//                {
+//                    if (err_code == NRF_SUCCESS)
+//                    {
+//                        err_code = battery_notification_send(&hvx_params,
+//                                                             conn_handles.conn_handles[i]);
+//                    }
+//                    else
+//                    {
+//                        // Preserve the first non-zero error code
+//                        UNUSED_RETURN_VALUE(battery_notification_send(&hvx_params,
+//                                                                      conn_handles.conn_handles[i]));
+//                    }
+//                }
+//            }
+//        }
+//        else
+//        {
+//            err_code = battery_notification_send(&hvx_params, conn_handle);
+//        }
 //    }
 //    else
 //    {
 //        err_code = NRF_ERROR_INVALID_STATE;
-//        NRF_LOG_INFO("sd_ble_gatts_hvx result: NRF_ERROR_INVALID_STATE. \r\n"); 
 //    }
 //
-//
-//
 //    return err_code;
-//}
-
-//void get_text(ble_option_t *p_opt, ble_gatts_value_t *text)
-//{
-//  uint32_t err_code;
-//
 //}

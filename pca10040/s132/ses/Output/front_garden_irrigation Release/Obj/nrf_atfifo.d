@@ -1,11 +1,11 @@
 Output/front_garden_irrigation\ Release/Obj/nrf_atfifo.o: \
  /home/sam/nRF5_SDK_15.3.0_59ac345/components/libraries/atomic_fifo/nrf_atfifo.c \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/string.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/__crossworks.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stdint.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stdbool.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/string.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/__crossworks.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stdint.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stdbool.h \
  ../../../../../../components/libraries/util/app_util.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stddef.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stddef.h \
  ../../../../../../modules/nrfx/mdk/compiler_abstraction.h \
  ../../../../../../components/libraries/util/nordic_common.h \
  ../../../../../../modules/nrfx/mdk/nrf.h \

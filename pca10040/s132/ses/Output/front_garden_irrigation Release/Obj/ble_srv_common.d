@@ -1,12 +1,12 @@
 Output/front_garden_irrigation\ Release/Obj/ble_srv_common.o: \
- /media/sdi4/Users/Sam/Documents/nRF5_SDK_15.3.0_59ac345/components/ble/common/ble_srv_common.c \
- /media/sdi4/Users/Sam/Documents/nRF5_SDK_15.3.0_59ac345/components/ble/common/ble_srv_common.h \
- /usr/share/segger_embedded_studio_for_arm_4.18/include/stdint.h \
- /usr/share/segger_embedded_studio_for_arm_4.18/include/stdbool.h \
+ /home/sam/nRF5_SDK_15.3.0_59ac345/components/ble/common/ble_srv_common.c \
+ /home/sam/nRF5_SDK_15.3.0_59ac345/components/ble/common/ble_srv_common.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stdint.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stdbool.h \
  ../../../../../../components/softdevice/s132/headers/ble_types.h \
  ../../../../../../components/libraries/util/app_util.h \
- /usr/share/segger_embedded_studio_for_arm_4.18/include/stddef.h \
- /usr/share/segger_embedded_studio_for_arm_4.18/include/__crossworks.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stddef.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/__crossworks.h \
  ../../../../../../modules/nrfx/mdk/compiler_abstraction.h \
  ../../../../../../components/libraries/util/nordic_common.h \
  ../../../../../../modules/nrfx/mdk/nrf.h \
@@ -37,10 +37,10 @@ Output/front_garden_irrigation\ Release/Obj/ble_srv_common.o: \
  ../../../../../../components/softdevice/s132/headers/ble_gatts.h \
  ../../../../../../components/softdevice/s132/headers/ble_gap.h \
  ../../../../../../components/softdevice/s132/headers/ble_gatt.h \
- /usr/share/segger_embedded_studio_for_arm_4.18/include/string.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/string.h \
  ../../../../../../components/libraries/util/nordic_common.h \
  ../../../../../../components/libraries/util/app_error.h \
- /usr/share/segger_embedded_studio_for_arm_4.18/include/stdio.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stdio.h \
  ../../../../../../components/libraries/util/sdk_errors.h \
  ../../../../../../components/softdevice/s132/headers/nrf_error.h \
  ../../../../../../components/libraries/util/app_error_weak.h

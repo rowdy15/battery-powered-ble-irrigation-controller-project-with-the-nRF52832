@@ -7404,7 +7404,7 @@
  
 
 #ifndef NRF_FPRINTF_FLAG_AUTOMATIC_CR_ON_LF_ENABLED
-#define NRF_FPRINTF_FLAG_AUTOMATIC_CR_ON_LF_ENABLED 1
+#define NRF_FPRINTF_FLAG_AUTOMATIC_CR_ON_LF_ENABLED 0
 #endif
 
 // </h> 
@@ -7419,7 +7419,7 @@
 // <e> NRF_LOG_BACKEND_RTT_ENABLED - nrf_log_backend_rtt - Log RTT backend
 //==========================================================
 #ifndef NRF_LOG_BACKEND_RTT_ENABLED
-#define NRF_LOG_BACKEND_RTT_ENABLED 1
+#define NRF_LOG_BACKEND_RTT_ENABLED 0
 #endif
 // <o> NRF_LOG_BACKEND_RTT_TEMP_BUFFER_SIZE - Size of buffer for partially processed strings. 
 // <i> Size of the buffer is a trade-off between RAM usage and processing.
@@ -11051,7 +11051,7 @@
 // <i> The time set aside for this connection on every connection interval in 1.25 ms units.
 
 #ifndef NRF_SDH_BLE_GAP_EVENT_LENGTH
-#define NRF_SDH_BLE_GAP_EVENT_LENGTH 6
+#define NRF_SDH_BLE_GAP_EVENT_LENGTH 100
 #endif
 
 // <o> NRF_SDH_BLE_GATT_MAX_MTU_SIZE - Static maximum MTU size. 

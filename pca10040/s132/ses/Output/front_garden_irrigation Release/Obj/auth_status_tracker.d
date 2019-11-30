@@ -1,10 +1,10 @@
 Output/front_garden_irrigation\ Release/Obj/auth_status_tracker.o: \
  /home/sam/nRF5_SDK_15.3.0_59ac345/components/ble/peer_manager/auth_status_tracker.c \
  ../../../../../../components/libraries/util/sdk_common.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stdint.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stdbool.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/string.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/__crossworks.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stdint.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stdbool.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/string.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/__crossworks.h \
  ../config/sdk_config.h \
  ../../../../../../components/libraries/util/nordic_common.h \
  ../../../../../../modules/nrfx/mdk/compiler_abstraction.h \
@@ -12,7 +12,7 @@ Output/front_garden_irrigation\ Release/Obj/auth_status_tracker.o: \
  ../../../../../../components/libraries/util/sdk_errors.h \
  ../../../../../../components/softdevice/s132/headers/nrf_error.h \
  ../../../../../../components/libraries/util/app_util.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stddef.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stddef.h \
  ../../../../../../modules/nrfx/mdk/nrf.h \
  ../../../../../../modules/nrfx/mdk/nrf52.h \
  ../../../../../../components/toolchain/cmsis/include/core_cm4.h \
@@ -40,7 +40,7 @@ Output/front_garden_irrigation\ Release/Obj/auth_status_tracker.o: \
  ../../../../../../components/softdevice/s132/headers/ble_err.h \
  ../../../../../../components/libraries/timer/app_timer.h \
  ../../../../../../components/libraries/util/app_error.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stdio.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stdio.h \
  ../../../../../../components/libraries/util/app_error_weak.h \
  ../../../../../../components/libraries/util/app_util.h \
  ../../../../../../components/libraries/util/nordic_common.h \

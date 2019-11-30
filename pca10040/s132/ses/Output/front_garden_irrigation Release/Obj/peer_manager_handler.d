@@ -2,7 +2,7 @@ Output/front_garden_irrigation\ Release/Obj/peer_manager_handler.o: \
  /home/sam/nRF5_SDK_15.3.0_59ac345/components/ble/peer_manager/peer_manager_handler.c \
  /home/sam/nRF5_SDK_15.3.0_59ac345/components/ble/peer_manager/peer_manager_handler.h \
  ../../../../../../components/softdevice/s132/headers/ble.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stdint.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stdint.h \
  ../../../../../../components/softdevice/s132/headers/nrf_svc.h \
  ../../../../../../components/softdevice/s132/headers/nrf_error.h \
  ../../../../../../components/softdevice/s132/headers/ble_err.h \
@@ -27,10 +27,10 @@ Output/front_garden_irrigation\ Release/Obj/peer_manager_handler.o: \
  ../../../../../../modules/nrfx/mdk/compiler_abstraction.h \
  ../../../../../../components/softdevice/s132/headers/ble_gatts.h \
  /home/sam/nRF5_SDK_15.3.0_59ac345/components/ble/peer_manager/peer_manager.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stdbool.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stdbool.h \
  ../../../../../../components/libraries/util/sdk_common.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/string.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/__crossworks.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/string.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/__crossworks.h \
  ../config/sdk_config.h \
  ../../../../../../components/libraries/util/nordic_common.h \
  ../../../../../../modules/nrfx/mdk/compiler_abstraction.h \
@@ -38,7 +38,7 @@ Output/front_garden_irrigation\ Release/Obj/peer_manager_handler.o: \
  ../../../../../../components/libraries/util/sdk_errors.h \
  ../../../../../../components/softdevice/s132/headers/nrf_error.h \
  ../../../../../../components/libraries/util/app_util.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stddef.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stddef.h \
  ../../../../../../components/softdevice/s132/headers/nrf52/nrf_mbr.h \
  ../../../../../../components/softdevice/s132/headers/nrf_svc.h \
  ../../../../../../components/libraries/util/sdk_macros.h \
@@ -54,7 +54,7 @@ Output/front_garden_irrigation\ Release/Obj/peer_manager_handler.o: \
  ../../../../../../components/softdevice/s132/headers/nrf_error_soc.h \
  ../../../../../../components/softdevice/s132/headers/nrf_nvic.h \
  ../../../../../../components/libraries/util/app_error.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stdio.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stdio.h \
  ../../../../../../components/libraries/util/app_error_weak.h \
  /home/sam/nRF5_SDK_15.3.0_59ac345/components/ble/peer_manager/peer_database.h \
  /home/sam/nRF5_SDK_15.3.0_59ac345/components/ble/peer_manager/peer_manager_internal.h \
@@ -75,5 +75,5 @@ Output/front_garden_irrigation\ Release/Obj/peer_manager_handler.o: \
  ../../../../../../components/libraries/log/src/nrf_log_ctrl_internal.h \
  ../../../../../../components/libraries/log/nrf_log_backend_interface.h \
  ../../../../../../components/libraries/memobj/nrf_memobj.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stdlib.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stdlib.h \
  ../../../../../../components/libraries/balloc/nrf_balloc.h

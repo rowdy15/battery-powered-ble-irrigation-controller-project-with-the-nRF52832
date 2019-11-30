@@ -1,10 +1,10 @@
 Output/front_garden_irrigation\ Release/Obj/ble_advdata.o: \
  /home/sam/nRF5_SDK_15.3.0_59ac345/components/ble/common/ble_advdata.c \
  /home/sam/nRF5_SDK_15.3.0_59ac345/components/ble/common/ble_advdata.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stdint.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stdbool.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/string.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/__crossworks.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stdint.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stdbool.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/string.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/__crossworks.h \
  ../../../../../../components/softdevice/s132/headers/ble.h \
  ../../../../../../components/softdevice/s132/headers/nrf_svc.h \
  ../../../../../../components/softdevice/s132/headers/nrf_error.h \
@@ -37,7 +37,7 @@ Output/front_garden_irrigation\ Release/Obj/ble_advdata.o: \
  ../../../../../../components/libraries/util/sdk_errors.h \
  ../../../../../../components/softdevice/s132/headers/nrf_error.h \
  ../../../../../../components/libraries/util/app_util.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stddef.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stddef.h \
  ../../../../../../components/softdevice/s132/headers/nrf52/nrf_mbr.h \
  ../../../../../../components/softdevice/s132/headers/nrf_svc.h \
  ../../../../../../components/libraries/util/sdk_macros.h \

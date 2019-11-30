@@ -1,12 +1,12 @@
 Output/front_garden_irrigation\ Release/Obj/nrf_ringbuf.o: \
  /home/sam/nRF5_SDK_15.3.0_59ac345/components/libraries/ringbuf/nrf_ringbuf.c \
  /home/sam/nRF5_SDK_15.3.0_59ac345/components/libraries/ringbuf/nrf_ringbuf.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stdint.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stdint.h \
  ../../../../../../components/libraries/atomic/nrf_atomic.h \
  ../../../../../../components/libraries/util/sdk_common.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stdbool.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/string.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/__crossworks.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stdbool.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/string.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/__crossworks.h \
  ../config/sdk_config.h \
  ../../../../../../components/libraries/util/nordic_common.h \
  ../../../../../../modules/nrfx/mdk/compiler_abstraction.h \
@@ -14,7 +14,7 @@ Output/front_garden_irrigation\ Release/Obj/nrf_ringbuf.o: \
  ../../../../../../components/libraries/util/sdk_errors.h \
  ../../../../../../components/softdevice/s132/headers/nrf_error.h \
  ../../../../../../components/libraries/util/app_util.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stddef.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stddef.h \
  ../../../../../../modules/nrfx/mdk/nrf.h \
  ../../../../../../modules/nrfx/mdk/nrf52.h \
  ../../../../../../components/toolchain/cmsis/include/core_cm4.h \
@@ -39,6 +39,6 @@ Output/front_garden_irrigation\ Release/Obj/nrf_ringbuf.o: \
  ../../../../../../components/softdevice/s132/headers/nrf_error_soc.h \
  ../../../../../../components/softdevice/s132/headers/nrf_nvic.h \
  ../../../../../../components/libraries/util/app_error.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stdio.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stdio.h \
  ../../../../../../components/libraries/util/app_error_weak.h \
  ../../../../../../components/libraries/util/nrf_assert.h

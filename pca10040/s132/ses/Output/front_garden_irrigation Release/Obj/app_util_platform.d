@@ -1,7 +1,7 @@
 Output/front_garden_irrigation\ Release/Obj/app_util_platform.o: \
- /media/sdi4/Users/Sam/Documents/nRF5_SDK_15.3.0_59ac345/components/libraries/util/app_util_platform.c \
- /media/sdi4/Users/Sam/Documents/nRF5_SDK_15.3.0_59ac345/components/libraries/util/app_util_platform.h \
- /usr/share/segger_embedded_studio_for_arm_4.18/include/stdint.h \
+ /home/sam/nRF5_SDK_15.3.0_59ac345/components/libraries/util/app_util_platform.c \
+ /home/sam/nRF5_SDK_15.3.0_59ac345/components/libraries/util/app_util_platform.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stdint.h \
  ../../../../../../modules/nrfx/mdk/compiler_abstraction.h \
  ../../../../../../modules/nrfx/mdk/nrf.h \
  ../../../../../../modules/nrfx/mdk/nrf52.h \
@@ -20,12 +20,12 @@ Output/front_garden_irrigation\ Release/Obj/app_util_platform.o: \
  ../../../../../../components/softdevice/s132/headers/nrf_error.h \
  ../../../../../../components/softdevice/s132/headers/nrf_error_soc.h \
  ../../../../../../components/softdevice/s132/headers/nrf_nvic.h \
- /media/sdi4/Users/Sam/Documents/nRF5_SDK_15.3.0_59ac345/components/libraries/util/nrf_assert.h \
- /media/sdi4/Users/Sam/Documents/nRF5_SDK_15.3.0_59ac345/components/libraries/util/app_error.h \
- /usr/share/segger_embedded_studio_for_arm_4.18/include/stdio.h \
- /usr/share/segger_embedded_studio_for_arm_4.18/include/__crossworks.h \
- /usr/share/segger_embedded_studio_for_arm_4.18/include/stdbool.h \
- /media/sdi4/Users/Sam/Documents/nRF5_SDK_15.3.0_59ac345/components/libraries/util/sdk_errors.h \
+ /home/sam/nRF5_SDK_15.3.0_59ac345/components/libraries/util/nrf_assert.h \
+ /home/sam/nRF5_SDK_15.3.0_59ac345/components/libraries/util/app_error.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stdio.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/__crossworks.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stdbool.h \
+ /home/sam/nRF5_SDK_15.3.0_59ac345/components/libraries/util/sdk_errors.h \
  ../../../../../../components/softdevice/s132/headers/nrf_error.h \
- /media/sdi4/Users/Sam/Documents/nRF5_SDK_15.3.0_59ac345/components/libraries/util/nordic_common.h \
- /media/sdi4/Users/Sam/Documents/nRF5_SDK_15.3.0_59ac345/components/libraries/util/app_error_weak.h
+ /home/sam/nRF5_SDK_15.3.0_59ac345/components/libraries/util/nordic_common.h \
+ /home/sam/nRF5_SDK_15.3.0_59ac345/components/libraries/util/app_error_weak.h

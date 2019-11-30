@@ -1,9 +1,9 @@
 Output/front_garden_irrigation\ Release/Obj/nrf_memobj.o: \
  /home/sam/nRF5_SDK_15.3.0_59ac345/components/libraries/memobj/nrf_memobj.c \
  /home/sam/nRF5_SDK_15.3.0_59ac345/components/libraries/memobj/nrf_memobj.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stdint.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stdlib.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/__crossworks.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stdint.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stdlib.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/__crossworks.h \
  ../../../../../../components/libraries/util/sdk_errors.h \
  ../../../../../../components/softdevice/s132/headers/nrf_error.h \
  ../../../../../../components/libraries/balloc/nrf_balloc.h \
@@ -29,13 +29,13 @@ Output/front_garden_irrigation\ Release/Obj/nrf_memobj.o: \
  ../../../../../../components/softdevice/s132/headers/nrf_nvic.h \
  ../../../../../../components/libraries/util/nrf_assert.h \
  ../../../../../../components/libraries/util/app_error.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stdio.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stdbool.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stdio.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stdbool.h \
  ../../../../../../components/libraries/util/sdk_errors.h \
  ../../../../../../components/libraries/util/nordic_common.h \
  ../../../../../../components/libraries/util/app_error_weak.h \
  ../../../../../../components/libraries/util/app_util.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stddef.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stddef.h \
  ../../../../../../components/softdevice/s132/headers/nrf52/nrf_mbr.h \
  ../../../../../../components/softdevice/s132/headers/nrf_svc.h \
  ../../../../../../components/libraries/log/nrf_log_instance.h \
@@ -44,7 +44,7 @@ Output/front_garden_irrigation\ Release/Obj/nrf_memobj.o: \
  ../../../../../../components/libraries/log/nrf_log_types.h \
  ../../../../../../components/libraries/atomic/nrf_atomic.h \
  ../../../../../../components/libraries/util/sdk_common.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/string.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/string.h \
  ../../../../../../components/libraries/util/sdk_os.h \
  ../../../../../../components/libraries/util/app_util.h \
  ../../../../../../components/libraries/util/sdk_macros.h \

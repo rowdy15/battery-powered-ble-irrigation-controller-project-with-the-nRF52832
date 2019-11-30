@@ -1,8 +1,8 @@
 Output/front_garden_irrigation\ Release/Obj/ble_conn_state.o: \
  /home/sam/nRF5_SDK_15.3.0_59ac345/components/ble/common/ble_conn_state.c \
  /home/sam/nRF5_SDK_15.3.0_59ac345/components/ble/common/ble_conn_state.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stdbool.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stdint.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stdbool.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stdint.h \
  ../../../../../../components/softdevice/s132/headers/ble.h \
  ../../../../../../components/softdevice/s132/headers/nrf_svc.h \
  ../../../../../../components/softdevice/s132/headers/nrf_error.h \
@@ -30,8 +30,8 @@ Output/front_garden_irrigation\ Release/Obj/ble_conn_state.o: \
  ../../../../../../components/softdevice/s132/headers/ble_gap.h \
  ../../../../../../components/libraries/atomic/nrf_atomic.h \
  ../../../../../../components/libraries/util/sdk_common.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/string.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/__crossworks.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/string.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/__crossworks.h \
  ../config/sdk_config.h \
  ../../../../../../components/libraries/util/nordic_common.h \
  ../../../../../../modules/nrfx/mdk/compiler_abstraction.h \
@@ -39,14 +39,14 @@ Output/front_garden_irrigation\ Release/Obj/ble_conn_state.o: \
  ../../../../../../components/libraries/util/sdk_errors.h \
  ../../../../../../components/softdevice/s132/headers/nrf_error.h \
  ../../../../../../components/libraries/util/app_util.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stddef.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stddef.h \
  ../../../../../../components/softdevice/s132/headers/nrf52/nrf_mbr.h \
  ../../../../../../components/softdevice/s132/headers/nrf_svc.h \
  ../../../../../../components/libraries/util/sdk_macros.h \
  ../../../../../../components/libraries/util/nrf_assert.h \
  ../../../../../../components/libraries/atomic_flags/nrf_atflags.h \
  ../../../../../../components/libraries/util/app_error.h \
- /usr/share/segger_embedded_studio_for_arm_4.12/include/stdio.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/stdio.h \
  ../../../../../../components/libraries/util/app_error_weak.h \
  ../../../../../../components/softdevice/common/nrf_sdh_ble.h \
  ../../../../../../components/libraries/util/app_util.h \

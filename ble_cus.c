@@ -11,8 +11,8 @@
 //#define TAP_1 LED_1
 //#define TAP_2 LED_2
 
-#define TAP_1 27
-#define TAP_2 28
+#define TAP_1 7
+#define TAP_2 8
 
 /**@brief Function for handling the Connect event.
  *
@@ -61,9 +61,9 @@ static void on_write(ble_cus_t * p_cus, ble_evt_t const * p_ble_evt)
     // Custom Value Characteristic Written to.
     if (p_evt_write->handle == p_cus->custom_value_handles.value_handle)
     {       
-        if(*p_evt_write->data == 0x00)
+        if(*p_evt_write->data == 0x00 )
         {      
-          SEGGER_RTT_WriteString(0, "The led is off!\r\n");
+          SEGGER_RTT_WriteString(0, "The tap will be turned off!\n");
           nrf_gpio_pin_write(TAP_1,0);
           nrf_gpio_cfg_input(TAP_1,NRF_GPIO_PIN_PULLDOWN);
           nrf_gpio_cfg_output(TAP_2);
@@ -71,14 +71,9 @@ static void on_write(ble_cus_t * p_cus, ble_evt_t const * p_ble_evt)
           nrf_delay_ms(2000);
           nrf_gpio_pin_write(TAP_2,0);
           nrf_gpio_cfg_input(TAP_2,NRF_GPIO_PIN_PULLDOWN);
-
-          ble_cus_evt_t evt;
-          evt.evt_type = BLE_CUS_EVT_NOTIFICATION_DISABLED;
-          p_cus->evt_handler(p_cus, &evt);
-
-        } else if(*p_evt_write->data > 0x00 && *p_evt_write->data <= 0x3C)
+        } else if(*p_evt_write->data > 0x00 && *p_evt_write->data <= 0x3C )
         {
-          SEGGER_RTT_WriteString(0, "The led is on!\r\n");
+          SEGGER_RTT_printf(0,"The tap will be on for %d minutes\n", *p_evt_write->data);
           nrf_gpio_pin_write(TAP_2,0);
           nrf_gpio_cfg_input(TAP_2,NRF_GPIO_PIN_PULLDOWN);
           nrf_gpio_cfg_output(TAP_1);
@@ -86,23 +81,8 @@ static void on_write(ble_cus_t * p_cus, ble_evt_t const * p_ble_evt)
           nrf_delay_ms(2000);
           nrf_gpio_pin_write(TAP_1,0);
           nrf_gpio_cfg_input(TAP_1,NRF_GPIO_PIN_PULLDOWN);
-
         }
-        else
-        {
-          SEGGER_RTT_WriteString(0, "The led is off!\r\n");
-          nrf_gpio_pin_write(TAP_1,0);
-          nrf_gpio_cfg_input(TAP_1,NRF_GPIO_PIN_PULLDOWN);
-          nrf_gpio_cfg_output(TAP_2);
-          nrf_gpio_pin_write(TAP_2,1);
-          nrf_delay_ms(2000);
-          nrf_gpio_pin_write(TAP_2,0);
-          nrf_gpio_cfg_input(TAP_2,NRF_GPIO_PIN_PULLDOWN);
 
-          ble_cus_evt_t evt;
-          evt.evt_type = BLE_CUS_EVT_NOTIFICATION_DISABLED;
-          p_cus->evt_handler(p_cus, &evt);
-        }
         
     }
 
@@ -291,27 +271,10 @@ uint32_t ble_cus_custom_value_update(ble_cus_t *p_cus)
 
     // Update database.
     err_code = sd_ble_gatts_value_set(p_cus->conn_handle, p_cus->custom_value_handles.value_handle, &gatts_value);
-    if (err_code != NRF_SUCCESS)
-    {
-        return err_code;
-    }
+    if (err_code != NRF_SUCCESS)    {        return err_code;    }
  
 
     //SEGGER_RTT_printf(0, "The tap gatts value is %d!\n",gatts_value.p_value);
-
-    if(tap_minutes_left == 0x00) {   // if tap value is zero
-    {
-      SEGGER_RTT_printf(0, "The tap has has been switched off!\n",tap_minutes_left);
-//       ble_cus_evt_t evt;
-//       evt.evt_type = BLE_CUS_EVT_NOTIFICATION_DISABLED;
-//       p_cus->evt_handler(p_cus, &evt);
-    }
-    } else {
-      SEGGER_RTT_printf(0, "The tap is switched on and has %d minutes left!\n",tap_minutes_left);
-          // Send value if connected and notifying.
-      
-    }
-
     
     if ((p_cus->conn_handle != BLE_CONN_HANDLE_INVALID)) 
     {
@@ -326,12 +289,36 @@ uint32_t ble_cus_custom_value_update(ble_cus_t *p_cus)
         hvx_params.p_data = gatts_value.p_value;
 
         err_code = sd_ble_gatts_hvx(p_cus->conn_handle, &hvx_params);
-        NRF_LOG_INFO("sd_ble_gatts_hvx result: %x. \r\n", err_code); 
+        //NRF_LOG_INFO("sd_ble_gatts_hvx result: %x. \r\n", err_code); 
+        SEGGER_RTT_printf(0, "sd_ble_gatts_hvx result: %x. \n", err_code);
+
     }
     else
     {
         err_code = NRF_ERROR_INVALID_STATE;
-        NRF_LOG_INFO("sd_ble_gatts_hvx result: NRF_ERROR_INVALID_STATE. \r\n"); 
+        //NRF_LOG_INFO("sd_ble_gatts_hvx result: NRF_ERROR_INVALID_STATE. \r\n");
+        SEGGER_RTT_WriteString(0, "sd_ble_gatts_hvx result: NRF_ERROR_INVALID_STATE. \n");
+    }
+
+    if(tap_minutes_left == 0x00) {   // if tap value is zero
+    {
+      SEGGER_RTT_printf(0, "The tap has has been switched off!\n",tap_minutes_left);
+      ble_cus_evt_t evt;
+      evt.evt_type = BLE_CUS_EVT_NOTIFICATION_DISABLED;
+      p_cus->evt_handler(p_cus, &evt);
+
+      nrf_gpio_pin_write(TAP_1,0);
+      nrf_gpio_cfg_input(TAP_1,NRF_GPIO_PIN_PULLDOWN);
+      nrf_gpio_cfg_output(TAP_2);
+      nrf_gpio_pin_write(TAP_2,1);
+      nrf_delay_ms(2000);
+      nrf_gpio_pin_write(TAP_2,0);
+      nrf_gpio_cfg_input(TAP_2,NRF_GPIO_PIN_PULLDOWN);
+    }
+    } else {
+      SEGGER_RTT_printf(0, "The tap is switched on and has %d minutes left!\n",tap_minutes_left);
+          // Send value if connected and notifying.
+      
     }
 
 

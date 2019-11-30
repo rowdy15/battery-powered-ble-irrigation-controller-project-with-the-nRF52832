@@ -31,8 +31,11 @@ NRF_SDH_BLE_OBSERVER(_name ## _obs,                                             
 /**@brief Custom Service event type. */
 typedef enum
 {
+    BLE_OPT_EVT_NOTIFICATION_ENABLED,                             /**< Custom value notification enabled event. */
+    BLE_OPT_EVT_NOTIFICATION_DISABLED,                             /**< Custom value notification disabled event. */
     BLE_OPT_EVT_DISCONNECTED,
     BLE_OPT_EVT_CONNECTED,
+    BLE_OPT_BAT_CHECK_1_MIN,
     BLE_OPT_BAT_CHECK_10_MIN,
     BLE_OPT_BAT_CHECK_30_MIN,
     BLE_OPT_BAT_CHECK_1_HR,
