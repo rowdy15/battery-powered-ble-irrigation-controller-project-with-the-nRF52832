@@ -75,16 +75,16 @@ static  uint32_t BATTERY_LEVEL_MEAS_INTERVAL  =  APP_TIMER_TICKS(3600000);   //1
 #define CUSTOM_SERVICE_NOTIFICATION_INTERVAL     APP_TIMER_TICKS(60000) 
 
 #define APP_ADV_FAST_INTERVAL           MSEC_TO_UNITS(500, UNIT_1_25_MS)  // 500 ms                       /**< Fast advertising interval (in units of 0.625 ms. This value corresponds to 25 ms.). */
-#define APP_ADV_SLOW_INTERVAL           MSEC_TO_UNITS(8000, UNIT_1_25_MS)  // 5 secs                       /**< Slow advertising interval (in units of 0.625 ms. This value corresponds to 100 ms.). */
+#define APP_ADV_SLOW_INTERVAL           MSEC_TO_UNITS(9000, UNIT_1_25_MS)  // 5 secs                       /**< Slow advertising interval (in units of 0.625 ms. This value corresponds to 100 ms.). */
 
-#define APP_ADV_FAST_DURATION           MSEC_TO_UNITS(3000, UNIT_10_MS)                                        /**< The advertising duration of fast advertising in units of 10 milliseconds. */
+#define APP_ADV_FAST_DURATION           MSEC_TO_UNITS(5000, UNIT_10_MS)                                        /**< The advertising duration of fast advertising in units of 10 milliseconds. */
 #define APP_ADV_SLOW_DURATION           0                                       /**< The advertising duration of slow advertising in units of 10 milliseconds. 0 means indefinitely. */
 
-#define MIN_CONN_INTERVAL               MSEC_TO_UNITS(300, UNIT_1_25_MS)        /**< Minimum acceptable connection interval (2 seconds). */
+#define MIN_CONN_INTERVAL               MSEC_TO_UNITS(200, UNIT_1_25_MS)        /**< Minimum acceptable connection interval (2 seconds). */
 //#define MAX_CONN_INTERVAL               BLE_GAP_CP_MAX_CONN_INTVL_MAX        /**< Maximum acceptable connection interval (4 second). */
-#define MAX_CONN_INTERVAL               MSEC_TO_UNITS(1000, UNIT_1_25_MS)       /**< Maximum acceptable connection interval (4 second). */
+#define MAX_CONN_INTERVAL               MSEC_TO_UNITS(500, UNIT_1_25_MS)       /**< Maximum acceptable connection interval (4 second). */
 
-#define SLAVE_LATENCY                   1                                       /**< Slave latency. */
+#define SLAVE_LATENCY                   10                                       /**< Slave latency. */
 #define CONN_SUP_TIMEOUT                BLE_GAP_CP_CONN_SUP_TIMEOUT_MAX         /**< Connection supervisory time-out (32 seconds). */
 
 #define FIRST_CONN_PARAMS_UPDATE_DELAY  APP_TIMER_TICKS(15000)                  /**< Time from initiating event (connect or start of notification) to first time sd_ble_gap_conn_param_update is called (15 seconds). */
@@ -620,9 +620,6 @@ static void on_adv_evt(ble_adv_evt_t ble_adv_evt)
 
         case BLE_ADV_EVT_SLOW_WHITELIST:
             SEGGER_RTT_WriteString(0, "Slow advertising with whitelist.\n");
-            APP_ERROR_CHECK(err_code);
-            err_code = ble_advertising_restart_without_whitelist(&m_advertising);
-            APP_ERROR_CHECK(err_code);
             break;
 
         case BLE_ADV_EVT_WHITELIST_REQUEST:
@@ -725,20 +722,20 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
         case BLE_GATTC_EVT_TIMEOUT:
             // Disconnect on GATT Client timeout event.
             //NRF_LOG_DEBUG("GATT Client Timeout.");
-//            SEGGER_RTT_WriteString(0, "GATT Client Timeout.\n");
+            SEGGER_RTT_WriteString(0, "GATT Client Timeout.\n");
 //            err_code = sd_ble_gap_disconnect(p_ble_evt->evt.gattc_evt.conn_handle,
 //                                             BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
-            APP_ERROR_CHECK(err_code);
+            //APP_ERROR_CHECK(err_code);
             break;
 
-//        case BLE_GATTS_EVT_TIMEOUT:
-//            // Disconnect on GATT Server timeout event.
-//            //NRF_LOG_DEBUG("GATT Server Timeout.");
-//            SEGGER_RTT_WriteString(0, "GATT Server Timeout.");
+        case BLE_GATTS_EVT_TIMEOUT:
+            // Disconnect on GATT Server timeout event.
+            //NRF_LOG_DEBUG("GATT Server Timeout.");
+            SEGGER_RTT_WriteString(0, "GATT Server Timeout.");
 //            err_code = sd_ble_gap_disconnect(p_ble_evt->evt.gatts_evt.conn_handle,
 //                                             BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
 //            APP_ERROR_CHECK(err_code);
-//            break;
+            break;
         case BLE_GAP_EVT_ADV_REPORT:
             SEGGER_RTT_printf(0,"RSSI: %d", p_ble_evt->evt.gap_evt.params.adv_report.rssi);
 
@@ -898,47 +895,47 @@ static void services_init(void)
  *
  * @param[in] p_evt  Event received from the Connection Parameters Module.
  */
-static void on_conn_params_evt(ble_conn_params_evt_t * p_evt)
-{
-    ret_code_t err_code;
-
-    if (p_evt->evt_type == BLE_CONN_PARAMS_EVT_FAILED)
-    {
-        err_code = sd_ble_gap_disconnect(m_conn_handle, BLE_HCI_CONN_INTERVAL_UNACCEPTABLE);
-        APP_ERROR_CHECK(err_code);
-    }
-}
-
-/**@brief Function for handling a Connection Parameters error.
- *
- * @param[in] nrf_error  Error code containing information about what went wrong.
- */
-static void conn_params_error_handler(uint32_t nrf_error)
-{
-    APP_ERROR_HANDLER(nrf_error);
-}
-
-/**@brief Function for initializing the Connection Parameters module.
- */
-static void conn_params_init(void)
-{
-    ret_code_t             err_code;
-    ble_conn_params_init_t cp_init;
-
-    memset(&cp_init, 0, sizeof(cp_init));
-
-    cp_init.p_conn_params                  = NULL;
-    cp_init.first_conn_params_update_delay = FIRST_CONN_PARAMS_UPDATE_DELAY;
-    cp_init.next_conn_params_update_delay  = NEXT_CONN_PARAMS_UPDATE_DELAY;
-    cp_init.max_conn_params_update_count   = MAX_CONN_PARAMS_UPDATE_COUNT;
-    cp_init.start_on_notify_cccd_handle    = BLE_GATT_HANDLE_INVALID;
-    cp_init.disconnect_on_fail             = false;
-    cp_init.evt_handler                    = on_conn_params_evt;
-    cp_init.error_handler                  = conn_params_error_handler;
-
-    err_code = ble_conn_params_init(&cp_init);
-    APP_ERROR_CHECK(err_code);
-}
+//static void on_conn_params_evt(ble_conn_params_evt_t * p_evt)
+//{
+//    ret_code_t err_code;
+//
+//    if (p_evt->evt_type == BLE_CONN_PARAMS_EVT_FAILED)
+//    {
+//        err_code = sd_ble_gap_disconnect(m_conn_handle, BLE_HCI_CONN_INTERVAL_UNACCEPTABLE);
+//        APP_ERROR_CHECK(err_code);
+//    }
+//}
+//
+///**@brief Function for handling a Connection Parameters error.
+// *
+// * @param[in] nrf_error  Error code containing information about what went wrong.
+// */
+//static void conn_params_error_handler(uint32_t nrf_error)
+//{
+//    APP_ERROR_HANDLER(nrf_error);
+//}
+//
+///**@brief Function for initializing the Connection Parameters module.
+// */
+//static void conn_params_init(void)
+//{
+//    ret_code_t             err_code;
+//    ble_conn_params_init_t cp_init;
+//
+//    memset(&cp_init, 0, sizeof(cp_init));
+//
+//    cp_init.p_conn_params                  = NULL;
+//    cp_init.first_conn_params_update_delay = FIRST_CONN_PARAMS_UPDATE_DELAY;
+//    cp_init.next_conn_params_update_delay  = NEXT_CONN_PARAMS_UPDATE_DELAY;
+//    cp_init.max_conn_params_update_count   = MAX_CONN_PARAMS_UPDATE_COUNT;
+//    cp_init.start_on_notify_cccd_handle    = BLE_GATT_HANDLE_INVALID;
+//    cp_init.disconnect_on_fail             = false;
+//    cp_init.evt_handler                    = on_conn_params_evt;
+//    cp_init.error_handler                  = conn_params_error_handler;
+//
+//    err_code = ble_conn_params_init(&cp_init);
+//    APP_ERROR_CHECK(err_code);
+//}
 
 /**@brief Function for initializing the BLE stack.
  *
@@ -1074,7 +1071,7 @@ int main(void)
     //ret_code_t err_code;
     bool erase_bonds;
     //Initialize.
-//    log_init();
+//   log_init();
     timers_init();
     buttons_leds_init(&erase_bonds);
     power_management_init();
@@ -1084,7 +1081,7 @@ int main(void)
     gatt_init();
     services_init();       //services init called before advertising init to ensure all services available
     advertising_init(); 
-    conn_params_init();
+    //conn_params_init();
     peer_manager_init();
     advertising_start(false);    
     SEGGER_RTT_WriteString(0, "Hello World!\n");

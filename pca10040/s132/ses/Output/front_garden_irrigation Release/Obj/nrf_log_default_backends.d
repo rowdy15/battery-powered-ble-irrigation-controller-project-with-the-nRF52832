@@ -53,4 +53,5 @@ Output/front_garden_irrigation\ Release/Obj/nrf_log_default_backends.o: \
  ../../../../../../components/libraries/util/nordic_common.h \
  /home/sam/nRF5_SDK_15.3.0_59ac345/components/libraries/log/src/nrf_log_internal.h \
  ../../../../../../components/libraries/log/nrf_log_types.h \
- ../../../../../../components/libraries/util/nrf_assert.h
+ ../../../../../../components/libraries/util/nrf_assert.h \
+ ../../../../../../components/libraries/log/nrf_log_backend_rtt.h

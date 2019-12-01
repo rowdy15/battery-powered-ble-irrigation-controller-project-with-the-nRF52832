@@ -90,6 +90,7 @@
       <file file_name="../../../../../../modules/nrfx/drivers/src/nrfx_rtc.c" />
       <file file_name="../../../../../../integration/nrfx/legacy/nrf_drv_uart.c">
         <configuration Name="Release" build_exclude_from_build="Yes" />
+        <configuration Name="Debug" build_exclude_from_build="No" />
       </file>
     </folder>
     <folder Name="Application">

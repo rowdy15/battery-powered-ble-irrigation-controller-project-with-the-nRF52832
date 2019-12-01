@@ -68,7 +68,7 @@ static void on_write(ble_cus_t * p_cus, ble_evt_t const * p_ble_evt)
           nrf_gpio_cfg_input(TAP_1,NRF_GPIO_PIN_PULLDOWN);
           nrf_gpio_cfg_output(TAP_2);
           nrf_gpio_pin_write(TAP_2,1);
-          nrf_delay_ms(2000);
+          nrf_delay_ms(1200);
           nrf_gpio_pin_write(TAP_2,0);
           nrf_gpio_cfg_input(TAP_2,NRF_GPIO_PIN_PULLDOWN);
         } else if(*p_evt_write->data > 0x00 && *p_evt_write->data <= 0x3C )
@@ -78,7 +78,7 @@ static void on_write(ble_cus_t * p_cus, ble_evt_t const * p_ble_evt)
           nrf_gpio_cfg_input(TAP_2,NRF_GPIO_PIN_PULLDOWN);
           nrf_gpio_cfg_output(TAP_1);
           nrf_gpio_pin_write(TAP_1,1); 
-          nrf_delay_ms(2000);
+          nrf_delay_ms(1200);
           nrf_gpio_pin_write(TAP_1,0);
           nrf_gpio_cfg_input(TAP_1,NRF_GPIO_PIN_PULLDOWN);
         }
@@ -293,12 +293,6 @@ uint32_t ble_cus_custom_value_update(ble_cus_t *p_cus)
         SEGGER_RTT_printf(0, "sd_ble_gatts_hvx result: %x. \n", err_code);
 
     }
-    else
-    {
-        err_code = NRF_ERROR_INVALID_STATE;
-        //NRF_LOG_INFO("sd_ble_gatts_hvx result: NRF_ERROR_INVALID_STATE. \r\n");
-        SEGGER_RTT_WriteString(0, "sd_ble_gatts_hvx result: NRF_ERROR_INVALID_STATE. \n");
-    }
 
     if(tap_minutes_left == 0x00) {   // if tap value is zero
     {
@@ -320,9 +314,6 @@ uint32_t ble_cus_custom_value_update(ble_cus_t *p_cus)
           // Send value if connected and notifying.
       
     }
-
-
-
     return err_code;
 }
 

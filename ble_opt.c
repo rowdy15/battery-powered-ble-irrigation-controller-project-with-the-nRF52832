@@ -138,7 +138,7 @@ void ble_opt_on_ble_evt( ble_evt_t const * p_ble_evt, void * p_context)
             break;
 
         case BLE_GATTS_EVT_WRITE:
-            SEGGER_RTT_WriteString(0, "the battery frequency characteristic has been written to \n");
+            //SEGGER_RTT_WriteString(0, "the battery frequency characteristic has been written to \n");
             on_write(p_opt, p_ble_evt);
             break;
 /* Handling this event is not necessary
