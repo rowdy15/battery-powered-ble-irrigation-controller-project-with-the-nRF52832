@@ -75,14 +75,14 @@ static  uint32_t BATTERY_LEVEL_MEAS_INTERVAL  =  APP_TIMER_TICKS(3600000);   //1
 #define CUSTOM_SERVICE_NOTIFICATION_INTERVAL     APP_TIMER_TICKS(60000) 
 
 #define APP_ADV_FAST_INTERVAL           MSEC_TO_UNITS(500, UNIT_1_25_MS)  // 500 ms                       /**< Fast advertising interval (in units of 0.625 ms. This value corresponds to 25 ms.). */
-#define APP_ADV_SLOW_INTERVAL           MSEC_TO_UNITS(9000, UNIT_1_25_MS)  // 5 secs                       /**< Slow advertising interval (in units of 0.625 ms. This value corresponds to 100 ms.). */
+#define APP_ADV_SLOW_INTERVAL           MSEC_TO_UNITS(7000, UNIT_1_25_MS)  // 7 secs  ~= 3.3 uA                   /**< Slow advertising interval (in units of 0.625 ms. This value corresponds to 100 ms.). */
 
 #define APP_ADV_FAST_DURATION           MSEC_TO_UNITS(5000, UNIT_10_MS)                                        /**< The advertising duration of fast advertising in units of 10 milliseconds. */
 #define APP_ADV_SLOW_DURATION           0                                       /**< The advertising duration of slow advertising in units of 10 milliseconds. 0 means indefinitely. */
 
-#define MIN_CONN_INTERVAL               MSEC_TO_UNITS(200, UNIT_1_25_MS)        /**< Minimum acceptable connection interval (2 seconds). */
-//#define MAX_CONN_INTERVAL               BLE_GAP_CP_MAX_CONN_INTVL_MAX        /**< Maximum acceptable connection interval (4 second). */
-#define MAX_CONN_INTERVAL               MSEC_TO_UNITS(500, UNIT_1_25_MS)       /**< Maximum acceptable connection interval (4 second). */
+#define MIN_CONN_INTERVAL               MSEC_TO_UNITS(200, UNIT_1_25_MS)        /**< Minimum acceptable connection interval (0.2 seconds). */
+//#define MAX_CONN_INTERVAL               BLE_GAP_CP_MAX_CONN_INTVL_MAX         /**< Maximum acceptable connection interval (4 second). */
+#define MAX_CONN_INTERVAL               MSEC_TO_UNITS(500, UNIT_1_25_MS)//~= 3.3 uA/
 
 #define SLAVE_LATENCY                   10                                       /**< Slave latency. */
 #define CONN_SUP_TIMEOUT                BLE_GAP_CP_CONN_SUP_TIMEOUT_MAX         /**< Connection supervisory time-out (32 seconds). */
@@ -271,7 +271,7 @@ static void adc_configure(void)
 static void battery_level_meas_timeout_handler(void * p_context)
 {
     UNUSED_PARAMETER(p_context);
-
+    SEGGER_RTT_WriteString(0,"im in battery_level_meas_timeout_handler function \n");
     ret_code_t err_code;
     adc_configure();
     err_code = nrf_drv_saadc_sample();
@@ -391,17 +391,6 @@ static void on_opt_evt(ble_option_t * p_opt_service, ble_opt_evt_t * p_evt)
     
     switch(p_evt->evt_type)
     {
-        case BLE_CUS_EVT_NOTIFICATION_ENABLED:
-            err_code = app_timer_start(m_battery_frequency_id, 1000, NULL);  //notify in 1 second
-            APP_ERROR_CHECK(err_code);
-            SEGGER_RTT_WriteString(0,"the Battery Frequency (option) service has been notify enabled\n");
-            break;
-
-        case BLE_CUS_EVT_NOTIFICATION_DISABLED:
-            SEGGER_RTT_WriteString(0,"the option service has been notify disabled\n");
-            err_code = app_timer_stop(m_battery_frequency_id);
-            APP_ERROR_CHECK(err_code);                        
-            break;
         case BLE_OPT_BAT_CHECK_1_MIN:
             BATTERY_LEVEL_MEAS_INTERVAL  =  APP_TIMER_TICKS(60000);
             SEGGER_RTT_WriteString(0,"battery read frequency was changed to 1 min!\n");
@@ -836,7 +825,7 @@ static void bas_init(void)
     bas_init_obj.evt_handler          = on_bas_evt;
     bas_init_obj.support_notification = true;
     bas_init_obj.p_report_ref         = NULL;
-    bas_init_obj.initial_batt_level   = 100;
+    bas_init_obj.initial_batt_level   = 0;
 
     bas_init_obj.bl_rd_sec        = SEC_JUST_WORKS;
     bas_init_obj.bl_cccd_wr_sec   = SEC_JUST_WORKS;
@@ -1086,8 +1075,8 @@ int main(void)
     advertising_start(false);    
     SEGGER_RTT_WriteString(0, "Hello World!\n");
 
-//    uint32_t err_code = sd_ble_gap_tx_power_set(BLE_GAP_TX_POWER_ROLE_ADV, m_advertising.adv_handle, 4); 
-//    APP_ERROR_CHECK(err_code); 
+    uint32_t err_code = sd_ble_gap_tx_power_set(BLE_GAP_TX_POWER_ROLE_CONN, m_advertising.adv_handle, 4); 
+    APP_ERROR_CHECK(err_code); 
 
     // Enter main loop.
     for (;;)

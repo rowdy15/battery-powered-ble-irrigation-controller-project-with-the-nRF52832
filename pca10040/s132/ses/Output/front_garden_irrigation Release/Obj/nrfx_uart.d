@@ -29,6 +29,7 @@ Output/front_garden_irrigation\ Release/Obj/nrfx_uart.o: \
  ../../../../../../components/libraries/util/app_util.h \
  ../../../../../../modules/nrfx/mdk/compiler_abstraction.h \
  ../../../../../../components/libraries/util/nordic_common.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/math.h \
  ../../../../../../components/softdevice/s132/headers/nrf52/nrf_mbr.h \
  ../../../../../../components/softdevice/s132/headers/nrf_svc.h \
  ../../../../../../components/libraries/util/nordic_common.h \

@@ -68,7 +68,7 @@ static void on_write(ble_cus_t * p_cus, ble_evt_t const * p_ble_evt)
           nrf_gpio_cfg_input(TAP_1,NRF_GPIO_PIN_PULLDOWN);
           nrf_gpio_cfg_output(TAP_2);
           nrf_gpio_pin_write(TAP_2,1);
-          nrf_delay_ms(1200);
+          nrf_delay_ms(800);
           nrf_gpio_pin_write(TAP_2,0);
           nrf_gpio_cfg_input(TAP_2,NRF_GPIO_PIN_PULLDOWN);
         } else if(*p_evt_write->data > 0x00 && *p_evt_write->data <= 0x3C )
@@ -78,7 +78,7 @@ static void on_write(ble_cus_t * p_cus, ble_evt_t const * p_ble_evt)
           nrf_gpio_cfg_input(TAP_2,NRF_GPIO_PIN_PULLDOWN);
           nrf_gpio_cfg_output(TAP_1);
           nrf_gpio_pin_write(TAP_1,1); 
-          nrf_delay_ms(1200);
+          nrf_delay_ms(800);
           nrf_gpio_pin_write(TAP_1,0);
           nrf_gpio_cfg_input(TAP_1,NRF_GPIO_PIN_PULLDOWN);
         }

@@ -41,8 +41,6 @@ static void on_disconnect(ble_option_t * p_opt, ble_evt_t const * p_ble_evt)
     p_opt->evt_handler(p_opt, &evt);
 }
 
-
-
 /**@brief Function for handling the Write event.
  *
  * @param[in]   p_opt       Custom Service structure.
@@ -52,6 +50,8 @@ static void on_write(ble_option_t * p_opt, ble_evt_t const * p_ble_evt)
 {
     ble_gatts_evt_write_t const * p_evt_write = &p_ble_evt->evt.gatts_evt.params.write;
     SEGGER_RTT_WriteString(0, "There has been an on write event\n");
+//    SEGGER_RTT_printf(0, "There frequency value is: %d\n",*p_evt_write->data);
+
     
     // Custom Value Characteristic Written to.
     if (p_evt_write->handle == p_opt->custom_value_handles.value_handle)
@@ -59,9 +59,6 @@ static void on_write(ble_option_t * p_opt, ble_evt_t const * p_ble_evt)
         ble_opt_evt_t evt;  
         
         switch (*p_evt_write->data){
-          case 0:
-            evt.evt_type = BLE_OPT_BAT_CHECK_1_MIN;
-            break;
           case 1:
             evt.evt_type = BLE_OPT_BAT_CHECK_1_MIN;
             break;

@@ -20,6 +20,7 @@ Output/front_garden_irrigation\ Release/Obj/nrf_atfifo.o: \
  ../../../../../../modules/nrfx/mdk/nrf51_to_nrf52.h \
  ../../../../../../modules/nrfx/mdk/nrf52_name_change.h \
  ../../../../../../modules/nrfx/mdk/compiler_abstraction.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/math.h \
  ../../../../../../components/softdevice/s132/headers/nrf52/nrf_mbr.h \
  ../../../../../../components/softdevice/s132/headers/nrf_svc.h \
  /home/sam/nRF5_SDK_15.3.0_59ac345/components/libraries/atomic_fifo/nrf_atfifo.h \

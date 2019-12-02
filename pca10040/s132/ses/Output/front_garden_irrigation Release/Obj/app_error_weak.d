@@ -31,6 +31,7 @@ Output/front_garden_irrigation\ Release/Obj/app_error_weak.o: \
  ../../../../../../components/libraries/util/sdk_errors.h \
  ../../../../../../components/libraries/util/app_util.h \
  /usr/share/segger_embedded_studio_for_arm_4.30b/include/stddef.h \
+ /usr/share/segger_embedded_studio_for_arm_4.30b/include/math.h \
  ../../../../../../components/softdevice/s132/headers/nrf52/nrf_mbr.h \
  ../../../../../../components/softdevice/s132/headers/nrf_svc.h \
  ../../../../../../components/libraries/util/sdk_macros.h \
