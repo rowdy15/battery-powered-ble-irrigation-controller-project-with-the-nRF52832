@@ -1277,14 +1277,14 @@
  
 
 #ifndef BLE_DFU_ENABLED
-#define BLE_DFU_ENABLED 0
+#define BLE_DFU_ENABLED 1
 #endif
 
 // <q> NRF_DFU_BLE_BUTTONLESS_SUPPORTS_BONDS  - Buttonless DFU supports bonds.
  
 
 #ifndef NRF_DFU_BLE_BUTTONLESS_SUPPORTS_BONDS
-#define NRF_DFU_BLE_BUTTONLESS_SUPPORTS_BONDS 0
+#define NRF_DFU_BLE_BUTTONLESS_SUPPORTS_BONDS 1
 #endif
 
 // </h> 
@@ -5704,7 +5704,7 @@
 // <e> UART_ENABLED - nrf_drv_uart - UART/UARTE peripheral driver - legacy layer
 //==========================================================
 #ifndef UART_ENABLED
-#define UART_ENABLED 0
+#define UART_ENABLED 1
 #endif
 // <o> UART_DEFAULT_CONFIG_HWFC  - Hardware Flow Control
  
@@ -7452,7 +7452,7 @@
 // <e> NRF_LOG_BACKEND_UART_ENABLED - nrf_log_backend_uart - Log UART backend
 //==========================================================
 #ifndef NRF_LOG_BACKEND_UART_ENABLED
-#define NRF_LOG_BACKEND_UART_ENABLED 0
+#define NRF_LOG_BACKEND_UART_ENABLED 1
 #endif
 // <o> NRF_LOG_BACKEND_UART_TX_PIN - UART TX pin 
 #ifndef NRF_LOG_BACKEND_UART_TX_PIN
@@ -9629,7 +9629,7 @@
 // <e> NRF_CLI_LIBUARTE_CONFIG_LOG_ENABLED - Enables logging in the module.
 //==========================================================
 #ifndef NRF_CLI_LIBUARTE_CONFIG_LOG_ENABLED
-#define NRF_CLI_LIBUARTE_CONFIG_LOG_ENABLED 0
+#define NRF_CLI_LIBUARTE_CONFIG_LOG_ENABLED 1
 #endif
 // <o> NRF_CLI_LIBUARTE_CONFIG_LOG_LEVEL  - Default Severity level
  
@@ -11753,6 +11753,15 @@
 
 // </h> 
 //==========================================================
+
+
+
+// custom define to make the dfu work in debugging mode
+
+#ifndef NRF_DFU_TRANSPORT_BLE 
+#define NRF_DFU_TRANSPORT_BLE 1
+#endif
+
 
 // <<< end of configuration section >>>
 #endif //SDK_CONFIG_H

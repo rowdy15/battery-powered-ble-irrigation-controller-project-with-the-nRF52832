@@ -61,9 +61,14 @@ static void on_write(ble_cus_t * p_cus, ble_evt_t const * p_ble_evt)
     // Custom Value Characteristic Written to.
     if (p_evt_write->handle == p_cus->custom_value_handles.value_handle)
     {       
+        ble_cus_evt_t evt;
+        
         if(*p_evt_write->data == 0x00 )
         {      
           SEGGER_RTT_WriteString(0, "The tap will be turned off!\n");
+
+          evt.evt_type = BLE_CUS_END_TAP_TIMER;
+
           nrf_gpio_pin_write(TAP_1,0);
           nrf_gpio_cfg_input(TAP_1,NRF_GPIO_PIN_PULLDOWN);
           nrf_gpio_cfg_output(TAP_2);
@@ -74,6 +79,7 @@ static void on_write(ble_cus_t * p_cus, ble_evt_t const * p_ble_evt)
         } else if(*p_evt_write->data > 0x00 && *p_evt_write->data <= 0x3C )
         {
           SEGGER_RTT_printf(0,"The tap will be on for %d minutes\n", *p_evt_write->data);
+
           nrf_gpio_pin_write(TAP_2,0);
           nrf_gpio_cfg_input(TAP_2,NRF_GPIO_PIN_PULLDOWN);
           nrf_gpio_cfg_output(TAP_1);
@@ -81,8 +87,11 @@ static void on_write(ble_cus_t * p_cus, ble_evt_t const * p_ble_evt)
           nrf_delay_ms(800);
           nrf_gpio_pin_write(TAP_1,0);
           nrf_gpio_cfg_input(TAP_1,NRF_GPIO_PIN_PULLDOWN);
-        }
 
+          evt.evt_type = BLE_CUS_BEGIN_TAP_TIMER;
+        }
+        
+        p_cus->evt_handler(p_cus, &evt);
         
     }
 
@@ -200,9 +209,10 @@ static uint32_t custom_value_char_add(ble_cus_t * p_cus, const ble_cus_init_t * 
     attr_char_value.init_len  = sizeof(uint8_t);
     attr_char_value.init_offs = 0;
     attr_char_value.max_len   = sizeof(uint8_t);
+    attr_char_value.p_value   = 0x00;
 
     err_code = sd_ble_gatts_characteristic_add(p_cus->service_handle, &char_md,
-                                               &attr_char_value,
+                                                 &attr_char_value,
                                                &p_cus->custom_value_handles);
     if (err_code != NRF_SUCCESS)
     {
@@ -242,7 +252,8 @@ uint32_t ble_cus_init(ble_cus_t * p_cus, const ble_cus_init_t * p_cus_init)
     }
 
     // Add Custom Value characteristic
-    return custom_value_char_add(p_cus, p_cus_init);
+    err_code = custom_value_char_add(p_cus, p_cus_init);
+    return err_code;    
 }
 
 uint32_t ble_cus_custom_value_update(ble_cus_t *p_cus)
@@ -312,6 +323,9 @@ uint32_t ble_cus_custom_value_update(ble_cus_t *p_cus)
     } else {
       SEGGER_RTT_printf(0, "The tap is switched on and has %d minutes left!\n",tap_minutes_left);
           // Send value if connected and notifying.
+      //ble_cus_evt_t evt;
+      //evt.evt_type = BLE_CUS_BEGIN_TAP_TIMER;
+      //p_cus->evt_handler(p_cus, &evt);
       
     }
     return err_code;

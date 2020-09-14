@@ -1,5 +1,10 @@
 #include <stdint.h>
 #include <string.h>
+
+#include "nrf_dfu_ble_svci_bond_sharing.h"
+#include "nrf_svci_async_function.h"
+#include "nrf_svci_async_handler.h"
+
 #include "nrf.h"
 #include "nrf_soc.h"
 #include "nrf_drv_saadc.h"
@@ -22,10 +27,10 @@
 #include "peer_manager_handler.h"
 #include "ble_advertising.h"
 #include "nrf_ble_gatt.h"
-
+#include "ble_dfu.h"
 #include "nrf_drv_rtc.h"
 #include "nrf_drv_clock.h"
-
+#include "nrf_bootloader_info.h"
 #include "nrf_ble_qwr.h"
 #include "nrf_pwr_mgmt.h"
 
@@ -39,9 +44,12 @@
 
 #include "ble_gap.h"
 
-//#include "nrf_log.h"
-//#include "nrf_log_ctrl.h"
-//#include "nrf_log_default_backends.h"
+#include "nrf_log.h"
+#include "nrf_log_ctrl.h"
+#include "nrf_log_default_backends.h"
+
+#include "ble_dfu.h"
+#include "nrf_power.h"
 
 /*
 UART driver and UART LOG is disabled to minimise current consumption.  
@@ -71,7 +79,7 @@ NVIC_SystemReset();                  ////
 #define APP_BLE_OBSERVER_PRIO           3                                       /**< Application's BLE observer priority. You shouldn't need to modify this value. */
 #define APP_BLE_CONN_CFG_TAG            1                                       /**< A tag identifying the SoftDevice BLE configuration. */
 
-static  uint32_t BATTERY_LEVEL_MEAS_INTERVAL  =  APP_TIMER_TICKS(3600000);   //1 Hour  =   3600000  /**< Battery level measurement interval (ticks). This value corresponds to 60 minutes. */
+#define BATTERY_LEVEL_MEAS_INTERVAL_5_MIN         APP_TIMER_TICKS(300000)   //5 minutes   /**< Battery level measurement interval (ticks). This value corresponds to 60 minutes. */
 #define CUSTOM_SERVICE_NOTIFICATION_INTERVAL     APP_TIMER_TICKS(60000) 
 
 #define APP_ADV_FAST_INTERVAL           MSEC_TO_UNITS(500, UNIT_1_25_MS)  // 500 ms                       /**< Fast advertising interval (in units of 0.625 ms. This value corresponds to 25 ms.). */
@@ -110,6 +118,8 @@ static  uint32_t BATTERY_LEVEL_MEAS_INTERVAL  =  APP_TIMER_TICKS(3600000);   //1
 
 #define DEAD_BEEF                       0xDEADBEEF                              /**< Value used as error code on stack dump, can be used to identify stack location on stack unwind. */
 
+#define MAX_RTC_COUNTER_VAL     0x00FFFFFF  
+
 /**@brief Macro to convert the result of ADC conversion in millivolts.
  *
  * @param[in]  ADC_VALUE   ADC result..
@@ -135,6 +145,8 @@ static bool               m_in_boot_mode = false;                               
 static uint8_t            m_adv_handle = BLE_GAP_ADV_SET_HANDLE_NOT_SET;                     /**< Advertising handle used to identify an advertising set. */
 static uint8_t            m_enc_advdata[BLE_GAP_ADV_SET_DATA_SIZE_MAX];                      /**< Buffer for storing an encoded advertising set. */
 static uint8_t            m_enc_scan_response_data[BLE_GAP_ADV_SET_DATA_SIZE_MAX];           /**< Buffer for storing an encoded scan data. */
+static uint16_t           battery_level_measure_interval_counter = 0;
+static uint16_t           battery_measure_interval = 12;  // 1 hour is the default 
 
 static nrf_saadc_value_t adc_buf[2];
 static uint32_t watering_duration =  0;                                      
@@ -145,6 +157,179 @@ static ble_uuid_t m_adv_uuids[] = {{CUSTOM_SERVICE_UUID,BLE_UUID_TYPE_VENDOR_BEG
 
 static void advertising_start(bool erase_bonds);
 static void on_bas_evt(ble_bas_t * p_bas, ble_bas_evt_t * p_evt);
+
+
+
+
+/**@brief Handler for shutdown preparation.
+ *
+ * @details During shutdown procedures, this function will be called at a 1 second interval
+ *          untill the function returns true. When the function returns true, it means that the
+ *          app is ready to reset to DFU mode.
+ *
+ * @param[in]   event   Power manager event.
+ *
+ * @retval  True if shutdown is allowed by this power manager handler, otherwise false.
+ */
+static bool app_shutdown_handler(nrf_pwr_mgmt_evt_t event)
+{
+    switch (event)
+    {
+        case NRF_PWR_MGMT_EVT_PREPARE_DFU:
+            //SEGGER_RTT_WriteString(0,"Power management wants to reset to DFU mode.");
+            // YOUR_JOB: Get ready to reset into DFU mode
+            //
+            // If you aren't finished with any ongoing tasks, return "false" to
+            // signal to the system that reset is impossible at this stage.
+            //
+            // Here is an example using a variable to delay resetting the device.
+            //
+            // if (!m_ready_for_reset)
+            // {
+            //      return false;
+            // }
+            // else
+            //{
+            //
+            //    // Device ready to enter
+            //    uint32_t err_code;
+            //    err_code = sd_softdevice_disable();
+            //    APP_ERROR_CHECK(err_code);
+            //    err_code = app_timer_stop_all();
+            //    APP_ERROR_CHECK(err_code);
+            //}
+            break;
+
+        default:
+            // YOUR_JOB: Implement any of the other events available from the power management module:
+            //      -NRF_PWR_MGMT_EVT_PREPARE_SYSOFF
+            //      -NRF_PWR_MGMT_EVT_PREPARE_WAKEUP
+            //      -NRF_PWR_MGMT_EVT_PREPARE_RESET
+            return true;
+    }
+
+    //SEGGER_RTT_WriteString(0,"Power management allowed to reset to DFU mode.");
+    return true;
+}
+
+// lint -esym(528, m_app_shutdown_handler)
+/**@brief Register application shutdown handler with priority 0.
+ */
+NRF_PWR_MGMT_HANDLER_REGISTER(app_shutdown_handler, 0);
+
+
+static void buttonless_dfu_sdh_state_observer(nrf_sdh_state_evt_t state, void * p_context)
+{
+    if (state == NRF_SDH_EVT_STATE_DISABLED)
+    {
+        // Softdevice was disabled before going into reset. Inform bootloader to skip CRC on next boot.
+        nrf_power_gpregret2_set(BOOTLOADER_DFU_SKIP_CRC);
+
+        //Go to system off.
+        nrf_pwr_mgmt_shutdown(NRF_PWR_MGMT_SHUTDOWN_GOTO_SYSOFF);
+    }
+}
+
+/* nrf_sdh state observer. */
+NRF_SDH_STATE_OBSERVER(m_buttonless_dfu_state_obs, 0) =
+{
+    .handler = buttonless_dfu_sdh_state_observer,
+};
+
+
+static void advertising_config_get(ble_adv_modes_config_t * p_config)
+{
+    memset(p_config, 0, sizeof(ble_adv_modes_config_t));
+
+    p_config->ble_adv_fast_enabled  = true;
+    p_config->ble_adv_fast_interval = APP_ADV_SLOW_INTERVAL;
+    p_config->ble_adv_fast_timeout  = APP_ADV_SLOW_DURATION;
+}
+
+
+static void disconnect(uint16_t conn_handle, void * p_context)
+{
+    UNUSED_PARAMETER(p_context);
+
+    ret_code_t err_code = sd_ble_gap_disconnect(conn_handle, BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
+    if (err_code != NRF_SUCCESS)
+    {
+        //NRF_LOG_WARNING("Failed to disconnect connection. Connection handle: %d Error: %d", conn_handle, err_code);
+    }
+    else
+    {
+        //NRF_LOG_DEBUG("Disconnected connection handle %d", conn_handle);
+    }
+}
+
+
+
+// YOUR_JOB: Update this code if you want to do anything given a DFU event (optional).
+/**@brief Function for handling dfu events from the Buttonless Secure DFU service
+ *
+ * @param[in]   event   Event from the Buttonless Secure DFU service.
+ */
+static void ble_dfu_evt_handler(ble_dfu_buttonless_evt_type_t event)
+{
+    switch (event)
+    {
+        case BLE_DFU_EVT_BOOTLOADER_ENTER_PREPARE:
+        {
+            //SEGGER_RTT_WriteString(0,"Device is preparing to enter bootloader mode.");
+
+            // Prevent device from advertising on disconnect.
+            ble_adv_modes_config_t config;
+            advertising_config_get(&config);
+            config.ble_adv_on_disconnect_disabled = true;
+            ble_advertising_modes_config_set(&m_advertising, &config);
+
+            // Disconnect all other bonded devices that currently are connected.
+            // This is required to receive a service changed indication
+            // on bootup after a successful (or aborted) Device Firmware Update.
+            uint32_t conn_count = ble_conn_state_for_each_connected(disconnect, NULL);
+            SEGGER_RTT_printf(0,"Disconnected %d links.", conn_count);
+            //SEGGER_RTT_WriteString(0,"Disconnected %d links.", conn_count);
+            break;
+        }
+
+        case BLE_DFU_EVT_BOOTLOADER_ENTER:
+            // YOUR_JOB: Write app-specific unwritten data to FLASH, control finalization of this
+            //           by delaying reset by reporting false in app_shutdown_handler
+            SEGGER_RTT_WriteString(0,"Device will enter bootloader mode.");
+            //SEGGER_RTT_WriteString(0,"Device will enter bootloader mode.");
+            break;
+
+        case BLE_DFU_EVT_BOOTLOADER_ENTER_FAILED:
+            SEGGER_RTT_WriteString(0,"Request to enter bootloader mode failed asynchroneously.");
+            //NRF_LOG_ERROR("Request to enter bootloader mode failed asynchroneously.");
+            // YOUR_JOB: Take corrective measures to resolve the issue
+            //           like calling APP_ERROR_CHECK to reset the device.
+            break;
+
+        case BLE_DFU_EVT_RESPONSE_SEND_ERROR:
+            SEGGER_RTT_WriteString(0,"Request to send a response to client failed.");
+            //NRF_LOG_ERROR("Request to send a response to client failed.");
+            // YOUR_JOB: Take corrective measures to resolve the issue
+            //           like calling APP_ERROR_CHECK to reset the device.
+            APP_ERROR_CHECK(false);
+            break;
+
+        default:
+            SEGGER_RTT_WriteString(0,"Device will enter bootloader mode.");
+            //NRF_LOG_ERROR("Unknown event from ble_dfu_buttonless.");
+            break;
+    }
+}
+
+
+
+
+
+
+
+
+
+
 
 static void tap_notification_timeout_handler(void * p_context)
 {
@@ -176,7 +361,35 @@ static void whitelist_set(pm_peer_id_list_skip_t skip)
     err_code = pm_whitelist_set(peer_ids, peer_id_count);
     APP_ERROR_CHECK(err_code);
 
-    SEGGER_RTT_printf(0,"m_whitelist_peers %s", peer_ids[0]);
+    //SEGGER_RTT_printf(0,"m_whitelist_peers %d", );
+}
+
+/**@brief Function for setting filtered device identities.
+ *
+ * @param[in] skip  Filter passed to @ref pm_peer_id_list.
+ */
+static void identities_set(pm_peer_id_list_skip_t skip)
+{
+    pm_peer_id_t peer_ids[BLE_GAP_DEVICE_IDENTITIES_MAX_COUNT];
+    uint32_t     peer_id_count = BLE_GAP_DEVICE_IDENTITIES_MAX_COUNT;
+
+    ret_code_t err_code = pm_peer_id_list(peer_ids, &peer_id_count, PM_PEER_ID_INVALID, skip);
+    APP_ERROR_CHECK(err_code);
+
+    err_code = pm_device_identities_list_set(peer_ids, peer_id_count);
+    APP_ERROR_CHECK(err_code);
+}
+
+/**@brief Clear bond information from persistent storage.
+ */
+static void delete_bonds(void)
+{
+    ret_code_t err_code;
+    SEGGER_RTT_WriteString(0,"Erasing Bonds!.\n");
+    //SEGGER_RTT_WriteString(0,"Erase bonds!");
+
+    err_code = pm_peers_delete();
+    APP_ERROR_CHECK(err_code);
 }
 
 /**@brief Function for handling Service errors.
@@ -188,7 +401,7 @@ static void whitelist_set(pm_peer_id_list_skip_t skip)
  */
 static void service_error_handler(uint32_t nrf_error)
 {
-    //NRF_LOG_INFO(nrf_error);
+    //SEGGER_RTT_WriteString(0,nrf_error);
     SEGGER_RTT_WriteString(0, " the nrf error is: " + nrf_error);
     APP_ERROR_HANDLER(nrf_error);
 }
@@ -270,12 +483,18 @@ static void adc_configure(void)
  */
 static void battery_level_meas_timeout_handler(void * p_context)
 {
-    UNUSED_PARAMETER(p_context);
     SEGGER_RTT_WriteString(0,"im in battery_level_meas_timeout_handler function \n");
+    battery_level_measure_interval_counter++;
+    if (battery_level_measure_interval_counter == battery_measure_interval){
+    SEGGER_RTT_WriteString(0,"and the battery level will be measured.\n");
+    UNUSED_PARAMETER(p_context);
     ret_code_t err_code;
     adc_configure();
     err_code = nrf_drv_saadc_sample();
     APP_ERROR_CHECK(err_code);
+    
+    battery_level_measure_interval_counter = 0;
+    }
 }
 
 static void notifyOfFrequencyChange(void * p_context)
@@ -317,9 +536,10 @@ static void on_bas_evt(ble_bas_t * p_bas, ble_bas_evt_t * p_evt)
     {
         case BLE_BAS_EVT_NOTIFICATION_ENABLED:
             // Start battery timer
-            SEGGER_RTT_WriteString(0,"the battery service has been notify enabled\n");
-            err_code = app_timer_start(m_battery_timer_id, BATTERY_LEVEL_MEAS_INTERVAL, NULL);
+            //SEGGER_RTT_WriteString(0,"the battery service has been notify enabled\n");
+            err_code = app_timer_start(m_battery_timer_id, BATTERY_LEVEL_MEAS_INTERVAL_5_MIN, NULL);
             APP_ERROR_CHECK(err_code);
+            SEGGER_RTT_WriteString(0,"the battery service has been notify enabled\n");
             break; // BLE_BAS_EVT_NOTIFICATION_ENABLED
 
         case BLE_BAS_EVT_NOTIFICATION_DISABLED:
@@ -350,25 +570,33 @@ static void on_cus_evt(ble_cus_t * p_cus_service, ble_cus_evt_t * p_evt)
     switch(p_evt->evt_type)
     {
         case BLE_CUS_EVT_NOTIFICATION_ENABLED:
-            err_code = app_timer_start(m_our_char_timer_id, CUSTOM_SERVICE_NOTIFICATION_INTERVAL, NULL);
-            APP_ERROR_CHECK(err_code);
-            SEGGER_RTT_WriteString(0,"the custom service has been notify enabled\n");
+            SEGGER_RTT_WriteString(0,"the custom service for setting and getting tap state has been notify enabled\n");
             break;
 
         case BLE_CUS_EVT_NOTIFICATION_DISABLED:
-            SEGGER_RTT_WriteString(0,"the custom service has been notify disabled\n");
+            SEGGER_RTT_WriteString(0,"the custom service for setting and getting tap state has been notify disabled\n");
             err_code = app_timer_stop(m_our_char_timer_id);
             APP_ERROR_CHECK(err_code);                        
             break;
-
-        case BLE_CUS_EVT_CONNECTED:
-            break;
-
+        case BLE_CUS_BEGIN_TAP_TIMER:
+              SEGGER_RTT_WriteString(0,"tap timer is on and counting down to zero.\n");
+              err_code = app_timer_start(m_our_char_timer_id, CUSTOM_SERVICE_NOTIFICATION_INTERVAL, NULL);
+              APP_ERROR_CHECK(err_code);
+              break;
+        case BLE_CUS_END_TAP_TIMER:
+              SEGGER_RTT_WriteString(0,"Tap timer will stop now.\n");
+              err_code = app_timer_stop(m_our_char_timer_id);
+              APP_ERROR_CHECK(err_code); 
+              break;
         case BLE_CUS_EVT_DISCONNECTED:
 //            SEGGER_RTT_WriteString(0,"if tap timer is on then then this will turn it off on disconnection of esp32\n");
 //            err_code = app_timer_stop(m_our_char_timer_id);
 //            APP_ERROR_CHECK(err_code); 
               break;
+
+        case BLE_CUS_EVT_CONNECTED:
+            break;
+
 
         default:
               // No implementation needed.
@@ -392,31 +620,31 @@ static void on_opt_evt(ble_option_t * p_opt_service, ble_opt_evt_t * p_evt)
     switch(p_evt->evt_type)
     {
         case BLE_OPT_BAT_CHECK_1_MIN:
-            BATTERY_LEVEL_MEAS_INTERVAL  =  APP_TIMER_TICKS(60000);
-            SEGGER_RTT_WriteString(0,"battery read frequency was changed to 1 min!\n");
+            battery_level_measure_interval_counter = 1;
+            SEGGER_RTT_WriteString(0,"battery read frequency was changed to 5 min!\n");
             break;
         case BLE_OPT_BAT_CHECK_10_MIN:
-            BATTERY_LEVEL_MEAS_INTERVAL  =  APP_TIMER_TICKS(600000);
+            battery_level_measure_interval_counter = 2;
             SEGGER_RTT_WriteString(0,"battery read frequency was changed to 10 min!\n");
             break;
         case BLE_OPT_BAT_CHECK_30_MIN:
-            BATTERY_LEVEL_MEAS_INTERVAL  =  APP_TIMER_TICKS(180000);
+            battery_level_measure_interval_counter = 6;
             SEGGER_RTT_WriteString(0,"battery read frequency was changed to 30 min!\n");
             break;
         case BLE_OPT_BAT_CHECK_1_HR:
-            BATTERY_LEVEL_MEAS_INTERVAL  =  APP_TIMER_TICKS(3600000);
+            battery_level_measure_interval_counter = 12;
             SEGGER_RTT_WriteString(0,"battery read frequency was changed to 1 hour!\n");
             break;
         case BLE_OPT_BAT_CHECK_6_HR:
-            BATTERY_LEVEL_MEAS_INTERVAL  =  APP_TIMER_TICKS(21600000);
+            battery_level_measure_interval_counter = 72;
             SEGGER_RTT_WriteString(0,"battery read frequency was changed to 6 hours!\n");
             break;
         case BLE_OPT_BAT_CHECK_12_HR:
-            BATTERY_LEVEL_MEAS_INTERVAL  =  APP_TIMER_TICKS(43200000);
+            battery_level_measure_interval_counter = 144;
             SEGGER_RTT_WriteString(0,"battery read frequency was changed to 12 hours!\n");
             break;
         case BLE_OPT_BAT_CHECK_24_HR:
-            BATTERY_LEVEL_MEAS_INTERVAL  =  APP_TIMER_TICKS(86400000);
+            battery_level_measure_interval_counter = 288;
             SEGGER_RTT_WriteString(0,"battery read frequency was changed to 24 hours!\n");
             break;
         case BLE_OPT_EVT_CONNECTED:
@@ -430,33 +658,9 @@ static void on_opt_evt(ble_option_t * p_opt_service, ble_opt_evt_t * p_evt)
     }
 }
 
-/**@brief Function for setting filtered device identities.
- *
- * @param[in] skip  Filter passed to @ref pm_peer_id_list.
- */
-static void identities_set(pm_peer_id_list_skip_t skip)
-{
-    pm_peer_id_t peer_ids[BLE_GAP_DEVICE_IDENTITIES_MAX_COUNT];
-    uint32_t     peer_id_count = BLE_GAP_DEVICE_IDENTITIES_MAX_COUNT;
 
-    ret_code_t err_code = pm_peer_id_list(peer_ids, &peer_id_count, PM_PEER_ID_INVALID, skip);
-    APP_ERROR_CHECK(err_code);
 
-    err_code = pm_device_identities_list_set(peer_ids, peer_id_count);
-    APP_ERROR_CHECK(err_code);
-}
 
-/**@brief Clear bond information from persistent storage.
- */
-static void delete_bonds(void)
-{
-    ret_code_t err_code;
-    SEGGER_RTT_WriteString(0,"Erasing Bonds!.\n");
-    //NRF_LOG_INFO("Erase bonds!");
-
-    err_code = pm_peers_delete();
-    APP_ERROR_CHECK(err_code);
-}
 
 /**@brief Function for starting advertising.
  */
@@ -537,8 +741,9 @@ static void pm_evt_handler(pm_evt_t const * p_evt)
 
         case PM_EVT_PEERS_DELETE_SUCCEEDED:
         {
-          NVIC_SystemReset();
-            //advertising_start(false);
+          SEGGER_RTT_WriteString(0,"PM_EVT_PEERS_DELETE_SUCCEEDED\n");
+          //NVIC_SystemReset();
+          //advertising_start(false);
         } break;
 
         case PM_EVT_PEER_DATA_UPDATE_FAILED:
@@ -579,6 +784,27 @@ static void pm_evt_handler(pm_evt_t const * p_evt)
 
 }
 
+
+/**@brief Function for putting the chip into sleep mode.
+ *
+ * @note This function will not return.
+ */
+static void sleep_mode_enter(void)
+{
+    ret_code_t err_code;
+
+    err_code = bsp_indication_set(BSP_INDICATE_IDLE);
+    APP_ERROR_CHECK(err_code);
+
+    // Prepare wakeup buttons.
+    err_code = bsp_btn_ble_sleep_mode_prepare();
+    APP_ERROR_CHECK(err_code);
+
+    // Go to system-off mode (this function will not return; wakeup will cause a reset).
+    err_code = sd_power_system_off();
+    APP_ERROR_CHECK(err_code);
+}
+
 /**@brief Function for handling advertising events.
  *
  * @details This function will be called for advertising events which are passed to the application.
@@ -592,23 +818,46 @@ static void on_adv_evt(ble_adv_evt_t ble_adv_evt)
     switch (ble_adv_evt)
     {
         case BLE_ADV_EVT_DIRECTED_HIGH_DUTY:
-            SEGGER_RTT_WriteString(0, "Directed advertising.\n");
+            SEGGER_RTT_WriteString(0,"Directed advertising.\n");
+            err_code = bsp_indication_set(BSP_INDICATE_ADVERTISING_DIRECTED);
+            APP_ERROR_CHECK(err_code);
             break;
 
         case BLE_ADV_EVT_FAST:
-            SEGGER_RTT_WriteString(0, "Fast advertising.\n");
+            SEGGER_RTT_WriteString(0,"Fast advertising.\n");
+            err_code = bsp_indication_set(BSP_INDICATE_ADVERTISING);
+            APP_ERROR_CHECK(err_code);
             break;
 
         case BLE_ADV_EVT_SLOW:
-            SEGGER_RTT_WriteString(0, "Slow advertising.\n");
+            SEGGER_RTT_WriteString(0,"Slow advertising.\n");
+#if SWIFT_PAIR_SUPPORTED == 1
+            m_sp_advdata.p_manuf_specific_data = NULL;
+            err_code = ble_advertising_advdata_update(&m_advertising, &m_sp_advdata, NULL);
+            APP_ERROR_CHECK(err_code);
+#endif
+            err_code = bsp_indication_set(BSP_INDICATE_ADVERTISING_SLOW);
+            APP_ERROR_CHECK(err_code);
             break;
 
         case BLE_ADV_EVT_FAST_WHITELIST:
-            SEGGER_RTT_WriteString(0, "Fast advertising with whitelist.\n");
+            SEGGER_RTT_WriteString(0,"Fast advertising with whitelist.\n");
+            err_code = bsp_indication_set(BSP_INDICATE_ADVERTISING_WHITELIST);
+            APP_ERROR_CHECK(err_code);
             break;
 
         case BLE_ADV_EVT_SLOW_WHITELIST:
-            SEGGER_RTT_WriteString(0, "Slow advertising with whitelist.\n");
+            SEGGER_RTT_WriteString(0,"Slow advertising with whitelist.\n");
+            err_code = bsp_indication_set(BSP_INDICATE_ADVERTISING_WHITELIST);
+            //APP_ERROR_CHECK(err_code);
+            //err_code = ble_advertising_restart_without_whitelist(&m_advertising);
+            //APP_ERROR_CHECK(err_code);
+            break;
+
+        case BLE_ADV_EVT_IDLE:
+            err_code = bsp_indication_set(BSP_INDICATE_IDLE);
+            APP_ERROR_CHECK(err_code);
+            sleep_mode_enter();
             break;
 
         case BLE_ADV_EVT_WHITELIST_REQUEST:
@@ -660,6 +909,8 @@ static void on_adv_evt(ble_adv_evt_t ble_adv_evt)
     }
 }
 
+
+
 /**@brief Function for handling BLE events.
  *
  * @param[in]   p_ble_evt   Bluetooth stack event.
@@ -672,7 +923,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
     switch (p_ble_evt->header.evt_id)
     {
         case BLE_GAP_EVT_CONNECTED:
-            //NRF_LOG_INFO("Connected");
+            //SEGGER_RTT_WriteString(0,"Connected");
             SEGGER_RTT_WriteString(0, "Connected.\n");
 
             m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
@@ -687,7 +938,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
             break;
 
         case BLE_GAP_EVT_DISCONNECTED:
-            //NRF_LOG_INFO("Disconnected");
+            //SEGGER_RTT_WriteString(0,"Disconnected");
             SEGGER_RTT_WriteString(0, "Disconnected\n");
             // LED indication will be changed when advertising starts.
 
@@ -709,21 +960,21 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
 
 
         case BLE_GATTC_EVT_TIMEOUT:
-            // Disconnect on GATT Client timeout event.
-            //NRF_LOG_DEBUG("GATT Client Timeout.");
             SEGGER_RTT_WriteString(0, "GATT Client Timeout.\n");
-//            err_code = sd_ble_gap_disconnect(p_ble_evt->evt.gattc_evt.conn_handle,
-//                                             BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
-            //APP_ERROR_CHECK(err_code);
+            err_code = sd_ble_gap_disconnect(p_ble_evt->evt.gattc_evt.conn_handle,
+                                             BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
+            APP_ERROR_CHECK(err_code);
             break;
 
         case BLE_GATTS_EVT_TIMEOUT:
             // Disconnect on GATT Server timeout event.
-            //NRF_LOG_DEBUG("GATT Server Timeout.");
-            SEGGER_RTT_WriteString(0, "GATT Server Timeout.");
-//            err_code = sd_ble_gap_disconnect(p_ble_evt->evt.gatts_evt.conn_handle,
-//                                             BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
-//            APP_ERROR_CHECK(err_code);
+            SEGGER_RTT_WriteString(0, "GATT Server Timeout.\n");
+            err_code = sd_ble_gap_disconnect(p_ble_evt->evt.gatts_evt.conn_handle,
+                                             BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
+            APP_ERROR_CHECK(err_code);
+            break;
+        case BLE_GATTS_EVT_WRITE:
+            SEGGER_RTT_WriteString(0, "GATT Write Event\n");
             break;
         case BLE_GAP_EVT_ADV_REPORT:
             SEGGER_RTT_printf(0,"RSSI: %d", p_ble_evt->evt.gap_evt.params.adv_report.rssi);
@@ -736,6 +987,8 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
     }
 }
 
+
+
 /**@brief Function for handling events from the BSP module.
  *
  * @param[in]   event   Event generated by button press.
@@ -745,8 +998,32 @@ static void bsp_event_handler(bsp_event_t event)
     uint32_t         err_code;
     switch (event)
     {
+        case BSP_EVENT_SLEEP:
+            SEGGER_RTT_WriteString(0,"BSP_EVENT_SLEEP\n");
+            sleep_mode_enter();
+            break;
+
         case BSP_EVENT_DISCONNECT:
-        delete_bonds();
+          SEGGER_RTT_WriteString(0,"BSP_EVENT_DISCONNECT\n");
+            err_code = sd_ble_gap_disconnect(m_conn_handle,
+                                             BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
+            if (err_code != NRF_ERROR_INVALID_STATE)
+            {
+                APP_ERROR_CHECK(err_code);
+            }
+            break;
+
+        case BSP_EVENT_WHITELIST_OFF:
+            SEGGER_RTT_WriteString(0,"BSP_EVENT_WHITELIST_OFF\n");
+            delete_bonds();
+            //if (m_conn_handle == BLE_CONN_HANDLE_INVALID)
+            //{
+            //    err_code = ble_advertising_restart_without_whitelist(&m_advertising);
+            //    if (err_code != NRF_ERROR_INVALID_STATE)
+            //    {
+            //        APP_ERROR_CHECK(err_code);
+            //    }
+            //}
             break;
         default:
             break;
@@ -781,29 +1058,33 @@ static void timers_init(void)
  * @details This function sets up all the necessary GAP (Generic Access Profile) parameters of the
  *          device including the device name, appearance, and the preferred connection parameters.
  */
-static void gap_params_init(void)
-{
-    ret_code_t              err_code;
-    ble_gap_conn_params_t   gap_conn_params;
-    ble_gap_conn_sec_mode_t sec_mode;
+//static void gap_params_init(void)
+//{
+//    ret_code_t              err_code;
+//    ble_gap_conn_params_t   gap_conn_params;
+//    ble_gap_conn_sec_mode_t sec_mode;
 
-    	BLE_GAP_CONN_SEC_MODE_SET_ENC_NO_MITM(&sec_mode);
+//    	BLE_GAP_CONN_SEC_MODE_SET_ENC_NO_MITM(&sec_mode);
 
-    err_code = sd_ble_gap_device_name_set(&sec_mode,
-                                          (const uint8_t *)DEVICE_NAME,
-                                          strlen(DEVICE_NAME));
-    APP_ERROR_CHECK(err_code);
+//    err_code = sd_ble_gap_device_name_set(&sec_mode,
+//                                          (const uint8_t *)DEVICE_NAME,
+//                                          strlen(DEVICE_NAME));
+//    APP_ERROR_CHECK(err_code);
 
-    memset(&gap_conn_params, 0, sizeof(gap_conn_params));
+//    memset(&gap_conn_params, 0, sizeof(gap_conn_params));
 
-    gap_conn_params.min_conn_interval = MIN_CONN_INTERVAL;
-    gap_conn_params.max_conn_interval = MAX_CONN_INTERVAL;
-    gap_conn_params.slave_latency     = SLAVE_LATENCY;
-    gap_conn_params.conn_sup_timeout  = CONN_SUP_TIMEOUT;
+//    gap_conn_params.min_conn_interval = MIN_CONN_INTERVAL;
+//    gap_conn_params.max_conn_interval = MAX_CONN_INTERVAL;
+//    gap_conn_params.slave_latency     = SLAVE_LATENCY;
+//    gap_conn_params.conn_sup_timeout  = CONN_SUP_TIMEOUT;
 
-    err_code = sd_ble_gap_ppcp_set(&gap_conn_params);
-    APP_ERROR_CHECK(err_code);
-}
+//    err_code = sd_ble_gap_ppcp_set(&gap_conn_params);
+//    APP_ERROR_CHECK(err_code);
+//}
+
+
+
+
 
 /**@brief Function for initializing the GATT module.
  */
@@ -845,6 +1126,7 @@ static void services_init(void)
     ble_bas_init_t bas_init_obj;
     ble_cus_init_t      cus_init = {0};
     ble_option_init_t      opt_init = {0};
+    ble_dfu_buttonless_init_t dfus_init = {0};
 
     // Initialize Queued Write Module.
     qwr_init.error_handler = nrf_qwr_error_handler;
@@ -867,64 +1149,19 @@ static void services_init(void)
     err_code = ble_cus_init(&m_cus, &cus_init);
     APP_ERROR_CHECK(err_code);
 
+    //sd_ble_gatts_value_set(&m_cus->conn_handle, &m_cus->custom_value_handles.value_handle, 0x00);
+
     err_code =  ble_option_init(&m_opt, &opt_init);
     APP_ERROR_CHECK(err_code);
 
-    bas_init();
-}
+    dfus_init.evt_handler = ble_dfu_evt_handler;
 
-/**@brief Function for handling the Connection Parameters Module.
- *
- * @details This function will be called for all events in the Connection Parameters Module that
- *          are passed to the application.
- *
- * @note All this function does is to disconnect. This could have been done by simply
- *       setting the disconnect_on_fail config parameter, but instead we use the event
- *       handler mechanism to demonstrate its use.
- *
- * @param[in] p_evt  Event received from the Connection Parameters Module.
- */
-//static void on_conn_params_evt(ble_conn_params_evt_t * p_evt)
-//{
-//    ret_code_t err_code;
-//
-//    if (p_evt->evt_type == BLE_CONN_PARAMS_EVT_FAILED)
-//    {
-//        err_code = sd_ble_gap_disconnect(m_conn_handle, BLE_HCI_CONN_INTERVAL_UNACCEPTABLE);
-//        APP_ERROR_CHECK(err_code);
-//    }
-//}
-//
-///**@brief Function for handling a Connection Parameters error.
-// *
-// * @param[in] nrf_error  Error code containing information about what went wrong.
-// */
-//static void conn_params_error_handler(uint32_t nrf_error)
-//{
-//    APP_ERROR_HANDLER(nrf_error);
-//}
-//
-///**@brief Function for initializing the Connection Parameters module.
-// */
-//static void conn_params_init(void)
-//{
-//    ret_code_t             err_code;
-//    ble_conn_params_init_t cp_init;
-//
-//    memset(&cp_init, 0, sizeof(cp_init));
-//
-//    cp_init.p_conn_params                  = NULL;
-//    cp_init.first_conn_params_update_delay = FIRST_CONN_PARAMS_UPDATE_DELAY;
-//    cp_init.next_conn_params_update_delay  = NEXT_CONN_PARAMS_UPDATE_DELAY;
-//    cp_init.max_conn_params_update_count   = MAX_CONN_PARAMS_UPDATE_COUNT;
-//    cp_init.start_on_notify_cccd_handle    = BLE_GATT_HANDLE_INVALID;
-//    cp_init.disconnect_on_fail             = false;
-//    cp_init.evt_handler                    = on_conn_params_evt;
-//    cp_init.error_handler                  = conn_params_error_handler;
-//
-//    err_code = ble_conn_params_init(&cp_init);
-//    APP_ERROR_CHECK(err_code);
-//}
+    //err_code = ble_dfu_buttonless_init(&dfus_init);
+    //APP_ERROR_CHECK(err_code);
+
+    bas_init();
+
+}
 
 /**@brief Function for initializing the BLE stack.
  *
@@ -1036,12 +1273,12 @@ static void buttons_leds_init(bool * p_erase_bonds)
     *p_erase_bonds = (startup_event == BSP_EVENT_CLEAR_BONDING_DATA);
 }
 
-//static void log_init(void)
-//{
-//    ret_code_t err_code = NRF_LOG_INIT(NULL);
-//    APP_ERROR_CHECK(err_code);
-//    NRF_LOG_DEFAULT_BACKENDS_INIT();
-//}
+static void log_init(void)
+{
+    ret_code_t err_code = NRF_LOG_INIT(NULL);
+    APP_ERROR_CHECK(err_code);
+    NRF_LOG_DEFAULT_BACKENDS_INIT();
+}
 
 /**@brief Function for initializing power management.
  */
@@ -1057,25 +1294,24 @@ static void power_management_init(void)
 int main(void)
 
  {
-    //ret_code_t err_code;
+    ret_code_t err_code;
     bool erase_bonds;
     //Initialize.
-//   log_init();
+    log_init();
     timers_init();
     buttons_leds_init(&erase_bonds);
     power_management_init();
     ble_stack_init();
     sd_power_dcdc_mode_set(NRF_POWER_DCDC_ENABLE);
-    gap_params_init();
+    //gap_params_init();
     gatt_init();
     services_init();       //services init called before advertising init to ensure all services available
     advertising_init(); 
-    //conn_params_init();
     peer_manager_init();
-    advertising_start(false);    
+    advertising_start(erase_bonds);    
     SEGGER_RTT_WriteString(0, "Hello World!\n");
 
-    uint32_t err_code = sd_ble_gap_tx_power_set(BLE_GAP_TX_POWER_ROLE_CONN, m_advertising.adv_handle, 4); 
+    err_code = sd_ble_gap_tx_power_set(BLE_GAP_TX_POWER_ROLE_CONN, m_advertising.adv_handle, 4); 
     APP_ERROR_CHECK(err_code); 
 
     // Enter main loop.
