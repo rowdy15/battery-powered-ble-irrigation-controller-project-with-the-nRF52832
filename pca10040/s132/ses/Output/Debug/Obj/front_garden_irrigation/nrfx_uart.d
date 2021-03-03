@@ -29,8 +29,8 @@ Output/Debug/Obj/front_garden_irrigation/nrfx_uart.o: \
  ../../../../../../components/libraries/util/app_util.h \
  ../../../../../../modules/nrfx/mdk/compiler_abstraction.h \
  ../../../../../../components/libraries/util/nordic_common.h \
- ../../../../../../components/softdevice/s132/headers/nrf52/nrf_mbr.h \
- ../../../../../../components/softdevice/s132/headers/nrf_svc.h \
+ ../../../../../../external/segger_rtt/SEGGER_RTT.h \
+ ../../../../../../external/segger_rtt/SEGGER_RTT_Conf.h \
  ../../../../../../components/libraries/util/nordic_common.h \
  ../../../../../../components/libraries/util/app_util_platform.h \
  ../../../../../../components/softdevice/s132/headers/nrf_soc.h \
@@ -44,6 +44,8 @@ Output/Debug/Obj/front_garden_irrigation/nrfx_uart.o: \
  ../../../../../../components/libraries/util/sdk_errors.h \
  ../../../../../../components/softdevice/s132/headers/nrf_error.h \
  ../../../../../../components/libraries/util/app_error_weak.h \
+ ../../../../../../components/softdevice/s132/headers/nrf52/nrf_mbr.h \
+ ../../../../../../components/softdevice/s132/headers/nrf_svc.h \
  ../../../../../../modules/nrfx/soc/nrfx_coredep.h \
  ../../../../../../modules/nrfx/soc/nrfx_atomic.h \
  ../../../../../../components/libraries/util/sdk_errors.h \

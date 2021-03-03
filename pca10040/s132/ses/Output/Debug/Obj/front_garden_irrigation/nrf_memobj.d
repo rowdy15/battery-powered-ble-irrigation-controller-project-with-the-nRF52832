@@ -36,11 +36,13 @@ Output/Debug/Obj/front_garden_irrigation/nrf_memobj.o: \
  ../../../../../../components/libraries/util/app_error_weak.h \
  ../../../../../../components/libraries/util/app_util.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 5.10b/include/stddef.h \
+ ../../../../../../external/segger_rtt/SEGGER_RTT.h \
+ ../../../../../../external/segger_rtt/SEGGER_RTT_Conf.h \
+ ../../../../../../components/libraries/util/nordic_common.h \
  ../../../../../../components/softdevice/s132/headers/nrf52/nrf_mbr.h \
  ../../../../../../components/softdevice/s132/headers/nrf_svc.h \
  ../../../../../../components/libraries/log/nrf_log_instance.h \
  ../../../../../../components/libraries/experimental_section_vars/nrf_section.h \
- ../../../../../../components/libraries/util/nordic_common.h \
  ../../../../../../components/libraries/log/nrf_log_types.h \
  ../../../../../../components/libraries/atomic/nrf_atomic.h \
  ../../../../../../components/libraries/util/sdk_common.h \

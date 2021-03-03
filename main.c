@@ -146,7 +146,9 @@ static uint8_t            m_adv_handle = BLE_GAP_ADV_SET_HANDLE_NOT_SET;        
 static uint8_t            m_enc_advdata[BLE_GAP_ADV_SET_DATA_SIZE_MAX];                      /**< Buffer for storing an encoded advertising set. */
 static uint8_t            m_enc_scan_response_data[BLE_GAP_ADV_SET_DATA_SIZE_MAX];           /**< Buffer for storing an encoded scan data. */
 static uint16_t           battery_level_measure_interval_counter = 0;
-static uint16_t           battery_measure_interval = 12;  // 1 hour is the default 
+static uint16_t           battery_measure_interval = 5;  // 1 hour is the default 
+
+static uint16_t           m_battery_conn_handle = BLE_CONN_HANDLE_INVALID;
 
 static nrf_saadc_value_t adc_buf[2];
 static uint32_t watering_duration =  0;                                      
@@ -437,13 +439,13 @@ void saadc_event_handler(nrf_drv_saadc_evt_t const * p_event)
         batt_lvl_in_milli_volts = ADC_RESULT_IN_MILLI_VOLTS(adc_result) +
                                   DIODE_FWD_VOLT_DROP_MILLIVOLTS;
         percentage_batt_lvl = battery_level_in_percent(batt_lvl_in_milli_volts);
-        SEGGER_RTT_printf(0,"the battery level in percent is: %d\n", percentage_batt_lvl);
-        err_code = ble_bas_battery_level_update(&m_bas, percentage_batt_lvl, BLE_CONN_HANDLE_ALL);
-        if ((err_code != NRF_SUCCESS) &&
-            (err_code != NRF_ERROR_INVALID_STATE) &&
-            (err_code != NRF_ERROR_RESOURCES) &&
-            (err_code != NRF_ERROR_BUSY) &&
-            (err_code != BLE_ERROR_GATTS_SYS_ATTR_MISSING)
+        //SEGGER_RTT_printf(0,"the battery level in percent is: %d\n", percentage_batt_lvl);
+        err_code = ble_bas_battery_level_update(&m_bas, percentage_batt_lvl, BLE_CONN_HANDLE_ALL,m_battery_conn_handle);
+        if ((err_code != NRF_SUCCESS) //&&
+            //(err_code != NRF_ERROR_INVALID_STATE) &&
+            //(err_code != NRF_ERROR_RESOURCES) &&
+            //(err_code != NRF_ERROR_BUSY) &&
+            //(err_code != BLE_ERROR_GATTS_SYS_ATTR_MISSING)
            )
         {
             APP_ERROR_HANDLER(err_code);
@@ -537,6 +539,11 @@ static void on_bas_evt(ble_bas_t * p_bas, ble_bas_evt_t * p_evt)
         case BLE_BAS_EVT_NOTIFICATION_ENABLED:
             // Start battery timer
             //SEGGER_RTT_WriteString(0,"the battery service has been notify enabled\n");
+
+
+//This below line of code ensure the conn_handle is correct that is getting to softdevice
+            m_battery_conn_handle = p_evt->conn_handle;
+
             err_code = app_timer_start(m_battery_timer_id, BATTERY_LEVEL_MEAS_INTERVAL_5_MIN, NULL);
             APP_ERROR_CHECK(err_code);
             SEGGER_RTT_WriteString(0,"the battery service has been notify enabled\n");
@@ -1123,7 +1130,7 @@ static void bas_init(void)
     bas_init_obj.evt_handler          = on_bas_evt;
     bas_init_obj.support_notification = true;
     bas_init_obj.p_report_ref         = NULL;
-    bas_init_obj.initial_batt_level   = 0;
+    bas_init_obj.initial_batt_level   = 100;
 
     bas_init_obj.bl_rd_sec        = SEC_JUST_WORKS;
     bas_init_obj.bl_cccd_wr_sec   = SEC_JUST_WORKS;
@@ -1337,9 +1344,9 @@ int main(void)
     err_code = sd_ble_gap_tx_power_set(BLE_GAP_TX_POWER_ROLE_CONN, m_advertising.adv_handle, 4); 
     APP_ERROR_CHECK(err_code); 
 
-    adc_configure();
-    err_code = nrf_drv_saadc_sample();
-    APP_ERROR_CHECK(err_code);
+    //adc_configure();
+    //err_code = nrf_drv_saadc_sample();
+    //APP_ERROR_CHECK(err_code);
 
     // Enter main loop.
     for (;;)

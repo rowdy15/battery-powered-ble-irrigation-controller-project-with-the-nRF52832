@@ -41,8 +41,18 @@ Output/Debug/Obj/front_garden_irrigation/ble_link_ctx_manager.o: \
  ../../../../../../components/softdevice/s132/headers/nrf_error.h \
  ../../../../../../components/libraries/util/app_util.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 5.10b/include/stddef.h \
+ ../../../../../../external/segger_rtt/SEGGER_RTT.h \
+ ../../../../../../external/segger_rtt/SEGGER_RTT_Conf.h \
+ ../../../../../../components/libraries/util/nordic_common.h \
+ ../../../../../../components/libraries/util/app_util_platform.h \
+ ../../../../../../components/softdevice/s132/headers/nrf_soc.h \
+ ../../../../../../components/softdevice/s132/headers/nrf_error_soc.h \
+ ../../../../../../components/softdevice/s132/headers/nrf_nvic.h \
+ ../../../../../../components/libraries/util/nrf_assert.h \
+ ../../../../../../components/libraries/util/app_error.h \
+ C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 5.10b/include/stdio.h \
+ ../../../../../../components/libraries/util/app_error_weak.h \
  ../../../../../../components/softdevice/s132/headers/nrf52/nrf_mbr.h \
  ../../../../../../components/softdevice/s132/headers/nrf_svc.h \
  ../../../../../../components/libraries/util/sdk_macros.h \
- ../../../../../../components/libraries/util/nrf_assert.h \
  ../../../../../../components/libraries/util/sdk_errors.h

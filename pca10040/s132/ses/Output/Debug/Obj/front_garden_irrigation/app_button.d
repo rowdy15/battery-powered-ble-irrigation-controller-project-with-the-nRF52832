@@ -25,14 +25,24 @@ Output/Debug/Obj/front_garden_irrigation/app_button.o: \
  ../../../../../../modules/nrfx/mdk/nrf51_to_nrf52.h \
  ../../../../../../modules/nrfx/mdk/nrf52_name_change.h \
  ../../../../../../modules/nrfx/mdk/compiler_abstraction.h \
- ../../../../../../components/softdevice/s132/headers/nrf52/nrf_mbr.h \
+ ../../../../../../external/segger_rtt/SEGGER_RTT.h \
+ ../../../../../../external/segger_rtt/SEGGER_RTT_Conf.h \
+ ../../../../../../components/libraries/util/nordic_common.h \
+ ../../../../../../components/libraries/util/app_util_platform.h \
+ ../../../../../../components/softdevice/s132/headers/nrf_soc.h \
  ../../../../../../components/softdevice/s132/headers/nrf_svc.h \
- ../../../../../../components/libraries/util/sdk_macros.h \
+ ../../../../../../components/softdevice/s132/headers/nrf_error.h \
+ ../../../../../../components/softdevice/s132/headers/nrf_error_soc.h \
+ ../../../../../../components/softdevice/s132/headers/nrf_nvic.h \
  ../../../../../../components/libraries/util/nrf_assert.h \
- C:\nRF5_SDK_15.3.0_59ac345\components\libraries\button\app_button.h \
  ../../../../../../components/libraries/util/app_error.h \
  C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 5.10b/include/stdio.h \
  ../../../../../../components/libraries/util/app_error_weak.h \
+ ../../../../../../components/softdevice/s132/headers/nrf52/nrf_mbr.h \
+ ../../../../../../components/softdevice/s132/headers/nrf_svc.h \
+ ../../../../../../components/libraries/util/sdk_macros.h \
+ C:\nRF5_SDK_15.3.0_59ac345\components\libraries\button\app_button.h \
+ ../../../../../../components/libraries/util/app_error.h \
  ../../../../../../modules/nrfx/hal/nrf_gpio.h \
  ../../../../../../modules/nrfx/nrfx.h \
  ../../../../../../integration/nrfx/nrfx_config.h \
@@ -45,14 +55,6 @@ Output/Debug/Obj/front_garden_irrigation/app_button.o: \
  ../../../../../../modules/nrfx/soc/nrfx_irqs_nrf52832.h \
  ../../../../../../components/libraries/util/nrf_assert.h \
  ../../../../../../components/libraries/util/app_util.h \
- ../../../../../../components/libraries/util/nordic_common.h \
- ../../../../../../components/libraries/util/app_util_platform.h \
- ../../../../../../components/softdevice/s132/headers/nrf_soc.h \
- ../../../../../../components/softdevice/s132/headers/nrf_svc.h \
- ../../../../../../components/softdevice/s132/headers/nrf_error.h \
- ../../../../../../components/softdevice/s132/headers/nrf_error_soc.h \
- ../../../../../../components/softdevice/s132/headers/nrf_nvic.h \
- ../../../../../../components/libraries/util/app_error.h \
  ../../../../../../modules/nrfx/soc/nrfx_coredep.h \
  ../../../../../../modules/nrfx/soc/nrfx_atomic.h \
  ../../../../../../components/libraries/util/sdk_errors.h \
