@@ -100,6 +100,8 @@ void ble_opt_on_ble_evt( ble_evt_t const * p_ble_evt, void * p_context);
 
 uint32_t ble_opt_notify_client(ble_option_t *p_opt);
 
+static uint32_t option_value_char_add(ble_option_t * p_opt, const ble_option_init_t * p_opt_init);
+
 /**@brief Function for updating the custom value.
  *
  * @details The application calls this function when the cutom value should be updated. If

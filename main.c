@@ -79,20 +79,20 @@ NVIC_SystemReset();                  ////
 #define APP_BLE_OBSERVER_PRIO           3                                       /**< Application's BLE observer priority. You shouldn't need to modify this value. */
 #define APP_BLE_CONN_CFG_TAG            1                                       /**< A tag identifying the SoftDevice BLE configuration. */
 
-#define BATTERY_LEVEL_MEAS_INTERVAL_5_MIN         APP_TIMER_TICKS(300000)   //5 minutes   /**< Battery level measurement interval (ticks). This value corresponds to 60 minutes. */
+#define BATTERY_LEVEL_MEAS_INTERVAL_5_MIN        APP_TIMER_TICKS(3000)   //5 minutes   /**< Battery level measurement interval (ticks). This value corresponds to 60 minutes. */
 #define CUSTOM_SERVICE_NOTIFICATION_INTERVAL     APP_TIMER_TICKS(60000) 
 
-#define APP_ADV_FAST_INTERVAL           MSEC_TO_UNITS(500, UNIT_1_25_MS)  // 500 ms                       /**< Fast advertising interval (in units of 0.625 ms. This value corresponds to 25 ms.). */
-#define APP_ADV_SLOW_INTERVAL           MSEC_TO_UNITS(7000, UNIT_1_25_MS)  // 7 secs  ~= 3.3 uA                   /**< Slow advertising interval (in units of 0.625 ms. This value corresponds to 100 ms.). */
+#define APP_ADV_FAST_INTERVAL           MSEC_TO_UNITS(200, UNIT_1_25_MS)  // 500 ms                       /**< Fast advertising interval (in units of 0.625 ms. This value corresponds to 25 ms.). */
+#define APP_ADV_SLOW_INTERVAL           MSEC_TO_UNITS(500, UNIT_1_25_MS)  // 7 secs  ~= 3.3 uA                   /**< Slow advertising interval (in units of 0.625 ms. This value corresponds to 100 ms.). */
 
-#define APP_ADV_FAST_DURATION           MSEC_TO_UNITS(5000, UNIT_10_MS)                                        /**< The advertising duration of fast advertising in units of 10 milliseconds. */
+#define APP_ADV_FAST_DURATION           MSEC_TO_UNITS(50000, UNIT_10_MS)                                        /**< The advertising duration of fast advertising in units of 10 milliseconds. */
 #define APP_ADV_SLOW_DURATION           0                                       /**< The advertising duration of slow advertising in units of 10 milliseconds. 0 means indefinitely. */
 
-#define MIN_CONN_INTERVAL               MSEC_TO_UNITS(200, UNIT_1_25_MS)        /**< Minimum acceptable connection interval (0.2 seconds). */
+#define MIN_CONN_INTERVAL               MSEC_TO_UNITS(100, UNIT_1_25_MS)        /**< Minimum acceptable connection interval (0.2 seconds). */
 //#define MAX_CONN_INTERVAL               BLE_GAP_CP_MAX_CONN_INTVL_MAX         /**< Maximum acceptable connection interval (4 second). */
-#define MAX_CONN_INTERVAL               MSEC_TO_UNITS(500, UNIT_1_25_MS)//~= 3.3 uA/
+#define MAX_CONN_INTERVAL               MSEC_TO_UNITS(200, UNIT_1_25_MS)//~= 3.3 uA/
 
-#define SLAVE_LATENCY                   10                                       /**< Slave latency. */
+#define SLAVE_LATENCY                   6                                       /**< Slave latency. */
 #define CONN_SUP_TIMEOUT                BLE_GAP_CP_CONN_SUP_TIMEOUT_MAX         /**< Connection supervisory time-out (32 seconds). */
 
 #define FIRST_CONN_PARAMS_UPDATE_DELAY  APP_TIMER_TICKS(15000)                  /**< Time from initiating event (connect or start of notification) to first time sd_ble_gap_conn_param_update is called (15 seconds). */
@@ -483,7 +483,7 @@ static void adc_configure(void)
  */
 static void battery_level_meas_timeout_handler(void * p_context)
 {
-    SEGGER_RTT_WriteString(0,"im in battery_level_meas_timeout_handler function \n");
+    //SEGGER_RTT_WriteString(0,"im in battery_level_meas_timeout_handler function \n");
     battery_level_measure_interval_counter++;
     if (battery_level_measure_interval_counter == battery_measure_interval){
     SEGGER_RTT_WriteString(0,"and the battery level will be measured.\n");
@@ -570,11 +570,11 @@ static void on_cus_evt(ble_cus_t * p_cus_service, ble_cus_evt_t * p_evt)
     switch(p_evt->evt_type)
     {
         case BLE_CUS_EVT_NOTIFICATION_ENABLED:
-            SEGGER_RTT_WriteString(0,"the custom service for setting and getting tap state has been notify enabled\n");
+            SEGGER_RTT_WriteString(0,"the custom service has been notify enabled\n");
             break;
 
         case BLE_CUS_EVT_NOTIFICATION_DISABLED:
-            SEGGER_RTT_WriteString(0,"the custom service for setting and getting tap state has been notify disabled\n");
+            SEGGER_RTT_WriteString(0,"the custom service has been notify disabled\n");
             err_code = app_timer_stop(m_our_char_timer_id);
             APP_ERROR_CHECK(err_code);                        
             break;
@@ -951,8 +951,8 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
             SEGGER_RTT_WriteString(0, "PHY update request\n");
             ble_gap_phys_t const phys =
             {
-                .rx_phys = BLE_GAP_PHY_AUTO,
-                .tx_phys = BLE_GAP_PHY_AUTO,
+              .rx_phys = BLE_GAP_PHY_AUTO,
+              .tx_phys = BLE_GAP_PHY_AUTO,
             };
             err_code = sd_ble_gap_phy_update(p_ble_evt->evt.gap_evt.conn_handle, &phys);
             APP_ERROR_CHECK(err_code);
@@ -998,35 +998,52 @@ static void bsp_event_handler(bsp_event_t event)
     uint32_t         err_code;
     switch (event)
     {
-        case BSP_EVENT_SLEEP:
-            SEGGER_RTT_WriteString(0,"BSP_EVENT_SLEEP\n");
-            sleep_mode_enter();
-            break;
+      case BSP_EVENT_KEY_0: //On Button 1 press
+          SEGGER_RTT_WriteString(0,"button 1 was pressed and sheep count is decremented\n");
+          //--sheep_count;
+          //for(uint16_t i=0;i<20;i++){
+          //  SEGGER_RTT_printf(0,"the time elapsed is %d for sheep %d\n",elapsed_times[i],i+1);
+          //}
+          break;
 
-        case BSP_EVENT_DISCONNECT:
-          SEGGER_RTT_WriteString(0,"BSP_EVENT_DISCONNECT\n");
-            err_code = sd_ble_gap_disconnect(m_conn_handle,
-                                             BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
-            if (err_code != NRF_ERROR_INVALID_STATE)
-            {
-                APP_ERROR_CHECK(err_code);
-            }
+      case BSP_EVENT_KEY_1: //On Button 2 press
+          delete_bonds();
+          //LEDS_INVERT(BSP_LED_1_MASK); //Changes the current state of LED_2
+          SEGGER_RTT_WriteString(0,"button 2 pressed and bonds deleted\n");
+      case BSP_EVENT_KEY_2: //On Button 3 press   
+    
             break;
+      case BSP_EVENT_KEY_3:	//On Button 4 press
 
-        case BSP_EVENT_WHITELIST_OFF:
-            SEGGER_RTT_WriteString(0,"BSP_EVENT_WHITELIST_OFF\n");
-            delete_bonds();
-            //if (m_conn_handle == BLE_CONN_HANDLE_INVALID)
-            //{
-            //    err_code = ble_advertising_restart_without_whitelist(&m_advertising);
-            //    if (err_code != NRF_ERROR_INVALID_STATE)
-            //    {
-            //        APP_ERROR_CHECK(err_code);
-            //    }
-            //}
-            break;
-        default:
-            break;
+      case BSP_EVENT_SLEEP:
+          SEGGER_RTT_WriteString(0,"BSP_EVENT_SLEEP\n");
+          sleep_mode_enter();
+          break;
+
+      case BSP_EVENT_DISCONNECT:
+        SEGGER_RTT_WriteString(0,"BSP_EVENT_DISCONNECT\n");
+          err_code = sd_ble_gap_disconnect(m_conn_handle,
+                                           BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
+          if (err_code != NRF_ERROR_INVALID_STATE)
+          {
+              APP_ERROR_CHECK(err_code);
+          }
+          break;
+
+      case BSP_EVENT_WHITELIST_OFF:
+          SEGGER_RTT_WriteString(0,"BSP_EVENT_WHITELIST_OFF\n");
+          delete_bonds();
+          //if (m_conn_handle == BLE_CONN_HANDLE_INVALID)
+          //{
+          //    err_code = ble_advertising_restart_without_whitelist(&m_advertising);
+          //    if (err_code != NRF_ERROR_INVALID_STATE)
+          //    {
+          //        APP_ERROR_CHECK(err_code);
+          //    }
+          //}
+          break;
+      default:
+          break;
     }
 }
 
@@ -1058,29 +1075,29 @@ static void timers_init(void)
  * @details This function sets up all the necessary GAP (Generic Access Profile) parameters of the
  *          device including the device name, appearance, and the preferred connection parameters.
  */
-//static void gap_params_init(void)
-//{
-//    ret_code_t              err_code;
-//    ble_gap_conn_params_t   gap_conn_params;
-//    ble_gap_conn_sec_mode_t sec_mode;
+static void gap_params_init(void)
+{
+  ret_code_t              err_code;
+  ble_gap_conn_params_t   gap_conn_params;
+  ble_gap_conn_sec_mode_t sec_mode;
 
-//    	BLE_GAP_CONN_SEC_MODE_SET_ENC_NO_MITM(&sec_mode);
+      BLE_GAP_CONN_SEC_MODE_SET_ENC_NO_MITM(&sec_mode);
 
-//    err_code = sd_ble_gap_device_name_set(&sec_mode,
-//                                          (const uint8_t *)DEVICE_NAME,
-//                                          strlen(DEVICE_NAME));
-//    APP_ERROR_CHECK(err_code);
+  err_code = sd_ble_gap_device_name_set(&sec_mode,
+                                        (const uint8_t *)DEVICE_NAME,
+                                        strlen(DEVICE_NAME));
+  APP_ERROR_CHECK(err_code);
 
-//    memset(&gap_conn_params, 0, sizeof(gap_conn_params));
+  memset(&gap_conn_params, 0, sizeof(gap_conn_params));
 
-//    gap_conn_params.min_conn_interval = MIN_CONN_INTERVAL;
-//    gap_conn_params.max_conn_interval = MAX_CONN_INTERVAL;
-//    gap_conn_params.slave_latency     = SLAVE_LATENCY;
-//    gap_conn_params.conn_sup_timeout  = CONN_SUP_TIMEOUT;
+  gap_conn_params.min_conn_interval = MIN_CONN_INTERVAL;
+  gap_conn_params.max_conn_interval = MAX_CONN_INTERVAL;
+  gap_conn_params.slave_latency     = SLAVE_LATENCY;
+  gap_conn_params.conn_sup_timeout  = CONN_SUP_TIMEOUT;
 
-//    err_code = sd_ble_gap_ppcp_set(&gap_conn_params);
-//    APP_ERROR_CHECK(err_code);
-//}
+  err_code = sd_ble_gap_ppcp_set(&gap_conn_params);
+  APP_ERROR_CHECK(err_code);
+}
 
 
 
@@ -1301,9 +1318,15 @@ int main(void)
     timers_init();
     buttons_leds_init(&erase_bonds);
     power_management_init();
+
     ble_stack_init();
     sd_power_dcdc_mode_set(NRF_POWER_DCDC_ENABLE);
-    //gap_params_init();
+
+    ble_gap_conn_sec_mode_t sec_mode;
+    BLE_GAP_CONN_SEC_MODE_SET_ENC_NO_MITM(&sec_mode);
+    err_code = sd_ble_gap_device_name_set(&sec_mode,
+                                        (const uint8_t *)DEVICE_NAME,
+                                        strlen(DEVICE_NAME));
     gatt_init();
     services_init();       //services init called before advertising init to ensure all services available
     advertising_init(); 
@@ -1313,6 +1336,10 @@ int main(void)
 
     err_code = sd_ble_gap_tx_power_set(BLE_GAP_TX_POWER_ROLE_CONN, m_advertising.adv_handle, 4); 
     APP_ERROR_CHECK(err_code); 
+
+    adc_configure();
+    err_code = nrf_drv_saadc_sample();
+    APP_ERROR_CHECK(err_code);
 
     // Enter main loop.
     for (;;)

@@ -11,8 +11,8 @@
 //#define TAP_1 LED_1
 //#define TAP_2 LED_2
 
-#define TAP_1 7
-#define TAP_2 8
+#define TAP_1 19
+#define TAP_2 20
 
 /**@brief Function for handling the Connect event.
  *
@@ -70,23 +70,23 @@ static void on_write(ble_cus_t * p_cus, ble_evt_t const * p_ble_evt)
           evt.evt_type = BLE_CUS_END_TAP_TIMER;
 
           nrf_gpio_pin_write(TAP_1,0);
-          nrf_gpio_cfg_input(TAP_1,NRF_GPIO_PIN_PULLDOWN);
+          nrf_gpio_cfg_input(TAP_1,NRF_GPIO_PIN_PULLUP);
           nrf_gpio_cfg_output(TAP_2);
           nrf_gpio_pin_write(TAP_2,1);
-          nrf_delay_ms(800);
+          nrf_delay_ms(1000);
           nrf_gpio_pin_write(TAP_2,0);
-          nrf_gpio_cfg_input(TAP_2,NRF_GPIO_PIN_PULLDOWN);
+          nrf_gpio_cfg_input(TAP_2,NRF_GPIO_PIN_PULLUP);
         } else if(*p_evt_write->data > 0x00 && *p_evt_write->data <= 0x3C )
         {
           SEGGER_RTT_printf(0,"The tap will be on for %d minutes\n", *p_evt_write->data);
 
           nrf_gpio_pin_write(TAP_2,0);
-          nrf_gpio_cfg_input(TAP_2,NRF_GPIO_PIN_PULLDOWN);
+          nrf_gpio_cfg_input(TAP_2,NRF_GPIO_PIN_PULLUP);
           nrf_gpio_cfg_output(TAP_1);
           nrf_gpio_pin_write(TAP_1,1); 
-          nrf_delay_ms(800);
+          nrf_delay_ms(1000);
           nrf_gpio_pin_write(TAP_1,0);
-          nrf_gpio_cfg_input(TAP_1,NRF_GPIO_PIN_PULLDOWN);
+          nrf_gpio_cfg_input(TAP_1,NRF_GPIO_PIN_PULLUP);
 
           evt.evt_type = BLE_CUS_BEGIN_TAP_TIMER;
         }
@@ -282,7 +282,7 @@ uint32_t ble_cus_custom_value_update(ble_cus_t *p_cus)
 
     // Update database.
     err_code = sd_ble_gatts_value_set(p_cus->conn_handle, p_cus->custom_value_handles.value_handle, &gatts_value);
-    if (err_code != NRF_SUCCESS)    {        return err_code;    }
+    if (err_code != NRF_SUCCESS)    {        APP_ERROR_CHECK(err_code);    }
  
 
     //SEGGER_RTT_printf(0, "The tap gatts value is %d!\n",gatts_value.p_value);

@@ -49,8 +49,7 @@ static void on_disconnect(ble_option_t * p_opt, ble_evt_t const * p_ble_evt)
 static void on_write(ble_option_t * p_opt, ble_evt_t const * p_ble_evt)
 {
     ble_gatts_evt_write_t const * p_evt_write = &p_ble_evt->evt.gatts_evt.params.write;
-    SEGGER_RTT_WriteString(0, "There has been an on write event\n");
-//    SEGGER_RTT_printf(0, "There frequency value is: %d\n",*p_evt_write->data);
+    SEGGER_RTT_printf(0, "There frequency value is: %d\n",*p_evt_write->data);
 
     
     // Custom Value Characteristic Written to.
@@ -156,7 +155,7 @@ void ble_opt_on_ble_evt( ble_evt_t const * p_ble_evt, void * p_context)
  *
  * @return      NRF_SUCCESS on success, otherwise an error code.
  */
-static uint32_t custom_value_char_add(ble_option_t * p_opt, const ble_option_init_t * p_opt_init)
+static uint32_t option_value_char_add(ble_option_t * p_opt, const ble_option_init_t * p_opt_init)
 {
     uint32_t            err_code;
     ble_gatts_char_md_t char_md;
@@ -205,6 +204,7 @@ static uint32_t custom_value_char_add(ble_option_t * p_opt, const ble_option_ini
     attr_char_value.init_len  = sizeof(uint8_t);
     attr_char_value.init_offs = 0;
     attr_char_value.max_len   = sizeof(uint8_t);
+    attr_char_value.p_value   = 0x00;
 
     err_code = sd_ble_gatts_characteristic_add(p_opt->service_handle, &char_md, &attr_char_value, &p_opt->custom_value_handles);
 //    if (err_code != NRF_SUCCESS)
@@ -246,7 +246,7 @@ uint32_t ble_option_init(ble_option_t * p_opt, const ble_option_init_t * p_opt_i
 //    }
 
     // Add Custom Value characteristic
-    err_code =  custom_value_char_add(p_opt, p_opt_init);
+    err_code =  option_value_char_add(p_opt, p_opt_init);
     APP_ERROR_CHECK(err_code); 
 }
 
@@ -300,88 +300,3 @@ uint32_t ble_opt_notify_client(ble_option_t *p_opt)
 
     return err_code;
 }
-
-
-//ret_code_t ble_opt_battery_frequency_update(ble_option_t * p_opt, uint8_t     battery_frequency, uint16_t    conn_handle)
-//{
-//    if (p_opt == NULL)
-//    {
-//        return NRF_ERROR_NULL;
-//    }
-//
-//    ret_code_t         err_code = NRF_SUCCESS;
-//    ble_gatts_value_t  gatts_value;
-//
-//    // Initialize value struct.
-//    memset(&gatts_value, 0, sizeof(gatts_value));
-//
-//    gatts_value.len     = sizeof(uint8_t);
-//    gatts_value.offset  = 0;
-//    gatts_value.p_value = &battery_level;
-//
-//    // Update database.
-//    err_code = sd_ble_gatts_value_set(BLE_CONN_HANDLE_INVALID,
-//                                      p_bas->battery_level_handles.value_handle,
-//                                      &gatts_value);
-//    if (err_code == NRF_SUCCESS)
-//    {
-//        NRF_LOG_INFO("Battery level has been updated: %d%%", battery_level)
-//
-//        // Save new battery value.
-//        p_bas->battery_level_last = battery_level;
-//    }
-//    else
-//    {
-//        NRF_LOG_DEBUG("Error during battery level update: 0x%08X", err_code)
-//
-//        return err_code;
-//    }
-//
-//    // Send value if connected and notifying.
-//    if (p_bas->is_notification_supported)
-//    {
-//        ble_gatts_hvx_params_t hvx_params;
-//
-//        memset(&hvx_params, 0, sizeof(hvx_params));
-//
-//        hvx_params.handle = p_bas->battery_level_handles.value_handle;
-//        hvx_params.type   = BLE_GATT_HVX_NOTIFICATION;
-//        hvx_params.offset = gatts_value.offset;
-//        hvx_params.p_len  = &gatts_value.len;
-//        hvx_params.p_data = gatts_value.p_value;
-//
-//        if (conn_handle == BLE_CONN_HANDLE_ALL)
-//        {
-//            ble_conn_state_conn_handle_list_t conn_handles = ble_conn_state_conn_handles();
-//
-//            // Try sending notifications to all valid connection handles.
-//            for (uint32_t i = 0; i < conn_handles.len; i++)
-//            {
-//                if (ble_conn_state_status(conn_handles.conn_handles[i]) == BLE_CONN_STATUS_CONNECTED)
-//                {
-//                    if (err_code == NRF_SUCCESS)
-//                    {
-//                        err_code = battery_notification_send(&hvx_params,
-//                                                             conn_handles.conn_handles[i]);
-//                    }
-//                    else
-//                    {
-//                        // Preserve the first non-zero error code
-//                        UNUSED_RETURN_VALUE(battery_notification_send(&hvx_params,
-//                                                                      conn_handles.conn_handles[i]));
-//                    }
-//                }
-//            }
-//        }
-//        else
-//        {
-//            err_code = battery_notification_send(&hvx_params, conn_handle);
-//        }
-//    }
-//    else
-//    {
-//        err_code = NRF_ERROR_INVALID_STATE;
-//    }
-//
-//    return err_code;
-//}

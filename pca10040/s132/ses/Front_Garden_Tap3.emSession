@@ -24,6 +24,7 @@
   <ProjectSessionItem path="ble_app_front_garden_irrigation"/>
   <ProjectSessionItem path="ble_app_front_garden_irrigation;front_garden_irrigation"/>
   <ProjectSessionItem path="ble_app_front_garden_irrigation;front_garden_irrigation;Application"/>
+  <ProjectSessionItem path="ble_app_front_garden_irrigation;front_garden_irrigation;Board Definition"/>
   <ProjectSessionItem path="ble_app_front_garden_irrigation;front_garden_irrigation;Board Support"/>
   <ProjectSessionItem path="ble_app_front_garden_irrigation;front_garden_irrigation;nRF_BLE"/>
   <ProjectSessionItem path="ble_app_front_garden_irrigation;front_garden_irrigation;nRF_BLE_Services"/>
@@ -68,10 +69,25 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="46" y="485" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../main.c" selected="1" top="447" codecName=""/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="64" y="6010" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../config/sdk_config.h" selected="0" top="5963" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="63" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../../components/libraries/timer/app_timer.c" selected="0" top="927" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="99" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../../components/libraries/util/app_error_weak.c" selected="0" top="4" codecName=""/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="1312" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../main.c" selected="0" top="614" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="6010" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../config/sdk_config.h" selected="0" top="5963" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="987" useTextEdit="1" openedFrom="C:/nRF5_SDK_15.3.0_59ac345/examples/ble_peripheral/battery-powered-ble-irrigation-controller-project-with-the-nRF52832/main.c" useBinaryEdit="0" left="0" path="../../../../../../components/libraries/timer/app_timer.c" selected="0" top="931" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="99" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../../components/libraries/util/app_error_weak.c" selected="0" top="78" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="C:/nRF5_SDK_15.3.0_59ac345/components/libraries/bsp/bsp.c" useBinaryEdit="0" left="0" path="../../../../../../components/libraries/bsp/bsp.h" selected="0" top="14" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="2007" useTextEdit="1" openedFrom="C:/nRF5_SDK_15.3.0_59ac345/examples/ble_peripheral/battery-powered-ble-irrigation-controller-project-with-the-nRF52832/main.c" useBinaryEdit="0" left="0" path="../../../../../../components/softdevice/s132/headers/ble_gap.h" selected="0" top="1982" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="51" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../../components/libraries/bsp/bsp.c" selected="0" top="26" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="25" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../../components/libraries/bsp/bsp_btn_ble.c" selected="0" top="6" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="39" useTextEdit="1" openedFrom="C:/nRF5_SDK_15.3.0_59ac345/components/libraries/bsp/bsp_btn_ble.c" useBinaryEdit="0" left="0" path="../../../../../../components/boards/boards.c" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="64" useTextEdit="1" openedFrom="C:/nRF5_SDK_15.3.0_59ac345/components/boards/boards.c" useBinaryEdit="0" left="0" path="../../../../../../components/boards/boards.h" selected="0" top="26" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="31" useTextEdit="1" openedFrom="C:/nRF5_SDK_15.3.0_59ac345/components/libraries/bsp/bsp.c" useBinaryEdit="0" left="0" path="../../../../../../components/libraries/button/app_button.h" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="284" useTextEdit="1" openedFrom="C:/nRF5_SDK_15.3.0_59ac345/examples/ble_peripheral/battery-powered-ble-irrigation-controller-project-with-the-nRF52832/main.c" useBinaryEdit="0" left="0" path="../../../ble_cus.c" selected="1" top="247" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="ble_cus.h" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="40" y="340" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../ble_opt.c" selected="0" top="326" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="ble_opt.h" selected="0" top="50" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="C:/nRF5_SDK_15.3.0_59ac345/components/boards/boards.h" useBinaryEdit="0" left="0" path="../../../../../../components/boards/pca10040.h" selected="0" top="24" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="39" y="242" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../../components/ble/ble_services/ble_bas/ble_bas.c" selected="0" top="330" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="135" useTextEdit="1" openedFrom="C:/nRF5_SDK_15.3.0_59ac345/components/ble/ble_services/ble_bas/ble_bas.c" useBinaryEdit="0" left="0" path="../../../../../../components/ble/ble_services/ble_bas/ble_bas.h" selected="0" top="116" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="73" useTextEdit="1" openedFrom="C:/nRF5_SDK_15.3.0_59ac345/examples/ble_peripheral/battery-powered-ble-irrigation-controller-project-with-the-nRF52832/ble_opt.c" useBinaryEdit="0" left="0" path="../../../ble_opt.h" selected="0" top="46" codecName="Default"/>
  </Files>
- <ARMCrossStudioWindow activeProject="front_garden_irrigation" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="Debug" sessionSettings="" debugSearchFileMap="C:/Program Files/SEGGER/SEGGER Embedded Studio for ARM 4.16/source/thumb_crt0.s&#xa;&#xa;C:\Users\Sam\Documents\nRF5_SDK_15.3.0_59ac345\modules\nrfx\mdk/ses_startup_nrf52.s&#xa;&#xa;C:\Users\Sam\Documents\nRF5_SDK_15.3.0_59ac345\modules\nrfx\mdk/ses_startup_nrf_common.s&#xa;" fileDialogInitialDirectory="/home/sam/nRF5_SDK_15.3.0_59ac345/components/libraries/bootloader/dfu" debugSearchPath="" autoConnectCapabilities="3711"/>
+ <ARMCrossStudioWindow activeProject="front_garden_irrigation" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="Debug" sessionSettings="" debugSearchFileMap="C:/Program Files/SEGGER/SEGGER Embedded Studio for ARM 4.16/source/thumb_crt0.s&#xa;&#xa;C:/Users/Sam/Documents/nRF5_SDK_15.3.0_59ac345/modules/nrfx/mdk/ses_startup_nrf52.s&#xa;&#xa;C:/Users/Sam/Documents/nRF5_SDK_15.3.0_59ac345/modules/nrfx/mdk/ses_startup_nrf_common.s&#xa;" fileDialogInitialDirectory="/home/sam/nRF5_SDK_15.3.0_59ac345/components/libraries/bootloader/dfu" debugSearchPath="" autoConnectCapabilities="3711"/>
 </session>
