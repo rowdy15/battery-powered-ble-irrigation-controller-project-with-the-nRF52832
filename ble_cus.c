@@ -307,9 +307,9 @@ uint32_t ble_cus_custom_value_update(ble_cus_t *p_cus)
 
     if(tap_minutes_left == 0x00) {   // if tap value is zero
     {
-      SEGGER_RTT_printf(0, "The tap has has been switched off!\n",tap_minutes_left);
+      SEGGER_RTT_WriteString(0, "The tap will be switched off now!\n");
       ble_cus_evt_t evt;
-      evt.evt_type = BLE_CUS_EVT_NOTIFICATION_DISABLED;
+      evt.evt_type = BLE_CUS_END_TAP_TIMER;
       p_cus->evt_handler(p_cus, &evt);
 
       nrf_gpio_pin_write(TAP_1,0);

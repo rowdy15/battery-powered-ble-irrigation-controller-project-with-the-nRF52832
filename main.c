@@ -824,48 +824,48 @@ static void on_adv_evt(ble_adv_evt_t ble_adv_evt)
 
     switch (ble_adv_evt)
     {
-        case BLE_ADV_EVT_DIRECTED_HIGH_DUTY:
-            SEGGER_RTT_WriteString(0,"Directed advertising.\n");
-            err_code = bsp_indication_set(BSP_INDICATE_ADVERTISING_DIRECTED);
-            APP_ERROR_CHECK(err_code);
-            break;
+        //case BLE_ADV_EVT_DIRECTED_HIGH_DUTY:
+        //    SEGGER_RTT_WriteString(0,"Directed advertising.\n");
+        //    err_code = bsp_indication_set(BSP_INDICATE_ADVERTISING_DIRECTED);
+        //    APP_ERROR_CHECK(err_code);
+        //    break;
 
-        case BLE_ADV_EVT_FAST:
-            SEGGER_RTT_WriteString(0,"Fast advertising.\n");
-            err_code = bsp_indication_set(BSP_INDICATE_ADVERTISING);
-            APP_ERROR_CHECK(err_code);
-            break;
+//        case BLE_ADV_EVT_FAST:
+//            SEGGER_RTT_WriteString(0,"Fast advertising.\n");
+//            err_code = bsp_indication_set(BSP_INDICATE_ADVERTISING);
+//            APP_ERROR_CHECK(err_code);
+//            break;
 
-        case BLE_ADV_EVT_SLOW:
-            SEGGER_RTT_WriteString(0,"Slow advertising.\n");
-#if SWIFT_PAIR_SUPPORTED == 1
-            m_sp_advdata.p_manuf_specific_data = NULL;
-            err_code = ble_advertising_advdata_update(&m_advertising, &m_sp_advdata, NULL);
-            APP_ERROR_CHECK(err_code);
-#endif
-            err_code = bsp_indication_set(BSP_INDICATE_ADVERTISING_SLOW);
-            APP_ERROR_CHECK(err_code);
-            break;
+//        case BLE_ADV_EVT_SLOW:
+//            SEGGER_RTT_WriteString(0,"Slow advertising.\n");
+//#if SWIFT_PAIR_SUPPORTED == 1
+//            m_sp_advdata.p_manuf_specific_data = NULL;
+//            err_code = ble_advertising_advdata_update(&m_advertising, &m_sp_advdata, NULL);
+//            APP_ERROR_CHECK(err_code);
+//#endif
+//            err_code = bsp_indication_set(BSP_INDICATE_ADVERTISING_SLOW);
+//            APP_ERROR_CHECK(err_code);
+//            break;
 
-        case BLE_ADV_EVT_FAST_WHITELIST:
-            SEGGER_RTT_WriteString(0,"Fast advertising with whitelist.\n");
-            err_code = bsp_indication_set(BSP_INDICATE_ADVERTISING_WHITELIST);
-            APP_ERROR_CHECK(err_code);
-            break;
+        //case BLE_ADV_EVT_FAST_WHITELIST:
+        //    SEGGER_RTT_WriteString(0,"Fast advertising with whitelist.\n");
+        //    err_code = bsp_indication_set(BSP_INDICATE_ADVERTISING_WHITELIST);
+        //    APP_ERROR_CHECK(err_code);
+        //    break;
 
-        case BLE_ADV_EVT_SLOW_WHITELIST:
-            SEGGER_RTT_WriteString(0,"Slow advertising with whitelist.\n");
-            err_code = bsp_indication_set(BSP_INDICATE_ADVERTISING_WHITELIST);
-            //APP_ERROR_CHECK(err_code);
-            //err_code = ble_advertising_restart_without_whitelist(&m_advertising);
-            //APP_ERROR_CHECK(err_code);
-            break;
+        //case BLE_ADV_EVT_SLOW_WHITELIST:
+        //    SEGGER_RTT_WriteString(0,"Slow advertising with whitelist.\n");
+        //    err_code = bsp_indication_set(BSP_INDICATE_ADVERTISING_WHITELIST);
+        //    //APP_ERROR_CHECK(err_code);
+        //    //err_code = ble_advertising_restart_without_whitelist(&m_advertising);
+        //    //APP_ERROR_CHECK(err_code);
+        //    break;
 
-        case BLE_ADV_EVT_IDLE:
-            err_code = bsp_indication_set(BSP_INDICATE_IDLE);
-            APP_ERROR_CHECK(err_code);
-            sleep_mode_enter();
-            break;
+        //case BLE_ADV_EVT_IDLE:
+        //    err_code = bsp_indication_set(BSP_INDICATE_IDLE);
+        //    APP_ERROR_CHECK(err_code);
+        //    sleep_mode_enter();
+        //    break;
 
         case BLE_ADV_EVT_WHITELIST_REQUEST:
         {
@@ -1006,7 +1006,7 @@ static void bsp_event_handler(bsp_event_t event)
     switch (event)
     {
       case BSP_EVENT_KEY_0: //On Button 1 press
-          SEGGER_RTT_WriteString(0,"button 1 was pressed and sheep count is decremented\n");
+          //SEGGER_RTT_WriteString(0,"button 1 was pressed and sheep count is decremented\n");
           //--sheep_count;
           //for(uint16_t i=0;i<20;i++){
           //  SEGGER_RTT_printf(0,"the time elapsed is %d for sheep %d\n",elapsed_times[i],i+1);
