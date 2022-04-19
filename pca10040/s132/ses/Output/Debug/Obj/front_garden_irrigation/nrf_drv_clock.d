@@ -1,15 +1,15 @@
 Output/Debug/Obj/front_garden_irrigation/nrf_drv_clock.o: \
- C:\nRF5_SDK_15.3.0_59ac345\integration\nrfx\legacy\nrf_drv_clock.c \
+ /home/sam/nRF5_SDK_15.3.0_59ac345/integration/nrfx/legacy/nrf_drv_clock.c \
  ../../../../../../components/libraries/util/nordic_common.h \
- C:\nRF5_SDK_15.3.0_59ac345\integration\nrfx\legacy\nrf_drv_clock.h \
+ /home/sam/nRF5_SDK_15.3.0_59ac345/integration/nrfx/legacy/nrf_drv_clock.h \
  ../../../../../../modules/nrfx/drivers/include/nrfx_clock.h \
  ../../../../../../modules/nrfx/nrfx.h \
  ../../../../../../integration/nrfx/nrfx_config.h ../config/sdk_config.h \
  ../../../../../../modules/nrfx/drivers/nrfx_common.h \
- C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 5.10b/include/stdint.h \
- C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 5.10b/include/stddef.h \
- C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 5.10b/include/__crossworks.h \
- C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 5.10b/include/stdbool.h \
+ /usr/share/segger_embedded_studio_for_arm_5.10b/include/stdint.h \
+ /usr/share/segger_embedded_studio_for_arm_5.10b/include/stddef.h \
+ /usr/share/segger_embedded_studio_for_arm_5.10b/include/__crossworks.h \
+ /usr/share/segger_embedded_studio_for_arm_5.10b/include/stdbool.h \
  ../../../../../../modules/nrfx/mdk/nrf.h \
  ../../../../../../modules/nrfx/mdk/nrf52.h \
  ../../../../../../components/toolchain/cmsis/include/core_cm4.h \
@@ -32,8 +32,8 @@ Output/Debug/Obj/front_garden_irrigation/nrf_drv_clock.o: \
  ../../../../../../components/libraries/util/app_util.h \
  ../../../../../../modules/nrfx/mdk/compiler_abstraction.h \
  ../../../../../../components/libraries/util/nordic_common.h \
- ../../../../../../external/segger_rtt/SEGGER_RTT.h \
- ../../../../../../external/segger_rtt/SEGGER_RTT_Conf.h \
+ ../../../../../../components/softdevice/s132/headers/nrf52/nrf_mbr.h \
+ ../../../../../../components/softdevice/s132/headers/nrf_svc.h \
  ../../../../../../components/libraries/util/app_util_platform.h \
  ../../../../../../components/softdevice/s132/headers/nrf_soc.h \
  ../../../../../../components/softdevice/s132/headers/nrf_svc.h \
@@ -42,12 +42,10 @@ Output/Debug/Obj/front_garden_irrigation/nrf_drv_clock.o: \
  ../../../../../../components/softdevice/s132/headers/nrf_nvic.h \
  ../../../../../../components/libraries/util/nrf_assert.h \
  ../../../../../../components/libraries/util/app_error.h \
- C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 5.10b/include/stdio.h \
+ /usr/share/segger_embedded_studio_for_arm_5.10b/include/stdio.h \
  ../../../../../../components/libraries/util/sdk_errors.h \
  ../../../../../../components/softdevice/s132/headers/nrf_error.h \
  ../../../../../../components/libraries/util/app_error_weak.h \
- ../../../../../../components/softdevice/s132/headers/nrf52/nrf_mbr.h \
- ../../../../../../components/softdevice/s132/headers/nrf_svc.h \
  ../../../../../../modules/nrfx/soc/nrfx_coredep.h \
  ../../../../../../modules/nrfx/soc/nrfx_atomic.h \
  ../../../../../../components/libraries/util/sdk_errors.h \
@@ -61,7 +59,7 @@ Output/Debug/Obj/front_garden_irrigation/nrf_drv_clock.o: \
  ../../../../../../components/libraries/experimental_section_vars/nrf_section.h \
  ../../../../../../components/softdevice/common/nrf_sdh_soc.h \
  ../../../../../../components/libraries/util/sdk_common.h \
- C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 5.10b/include/string.h \
+ /usr/share/segger_embedded_studio_for_arm_5.10b/include/string.h \
  ../../../../../../components/libraries/util/sdk_os.h \
  ../../../../../../components/libraries/util/app_util.h \
  ../../../../../../components/libraries/util/sdk_macros.h \

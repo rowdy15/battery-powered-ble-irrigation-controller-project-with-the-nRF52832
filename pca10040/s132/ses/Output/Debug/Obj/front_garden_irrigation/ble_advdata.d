@@ -1,10 +1,10 @@
 Output/Debug/Obj/front_garden_irrigation/ble_advdata.o: \
- C:\nRF5_SDK_15.3.0_59ac345\components\ble\common\ble_advdata.c \
- C:\nRF5_SDK_15.3.0_59ac345\components\ble\common\ble_advdata.h \
- C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 5.10b/include/stdint.h \
- C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 5.10b/include/stdbool.h \
- C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 5.10b/include/string.h \
- C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 5.10b/include/__crossworks.h \
+ /home/sam/nRF5_SDK_15.3.0_59ac345/components/ble/common/ble_advdata.c \
+ /home/sam/nRF5_SDK_15.3.0_59ac345/components/ble/common/ble_advdata.h \
+ /usr/share/segger_embedded_studio_for_arm_5.10b/include/stdint.h \
+ /usr/share/segger_embedded_studio_for_arm_5.10b/include/stdbool.h \
+ /usr/share/segger_embedded_studio_for_arm_5.10b/include/string.h \
+ /usr/share/segger_embedded_studio_for_arm_5.10b/include/__crossworks.h \
  ../../../../../../components/softdevice/s132/headers/ble.h \
  ../../../../../../components/softdevice/s132/headers/nrf_svc.h \
  ../../../../../../components/softdevice/s132/headers/nrf_error.h \
@@ -37,23 +37,13 @@ Output/Debug/Obj/front_garden_irrigation/ble_advdata.o: \
  ../../../../../../components/libraries/util/sdk_errors.h \
  ../../../../../../components/softdevice/s132/headers/nrf_error.h \
  ../../../../../../components/libraries/util/app_util.h \
- C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 5.10b/include/stddef.h \
- ../../../../../../external/segger_rtt/SEGGER_RTT.h \
- ../../../../../../external/segger_rtt/SEGGER_RTT_Conf.h \
- ../../../../../../components/libraries/util/nordic_common.h \
- ../../../../../../components/libraries/util/app_util_platform.h \
- ../../../../../../components/softdevice/s132/headers/nrf_soc.h \
- ../../../../../../components/softdevice/s132/headers/nrf_error_soc.h \
- ../../../../../../components/softdevice/s132/headers/nrf_nvic.h \
- ../../../../../../components/libraries/util/nrf_assert.h \
- ../../../../../../components/libraries/util/app_error.h \
- C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 5.10b/include/stdio.h \
- ../../../../../../components/libraries/util/app_error_weak.h \
+ /usr/share/segger_embedded_studio_for_arm_5.10b/include/stddef.h \
  ../../../../../../components/softdevice/s132/headers/nrf52/nrf_mbr.h \
  ../../../../../../components/softdevice/s132/headers/nrf_svc.h \
  ../../../../../../components/libraries/util/sdk_macros.h \
+ ../../../../../../components/libraries/util/nrf_assert.h \
  ../../../../../../components/softdevice/s132/headers/ble_gap.h \
- C:\nRF5_SDK_15.3.0_59ac345\components\ble\common\ble_srv_common.h \
+ /home/sam/nRF5_SDK_15.3.0_59ac345/components/ble/common/ble_srv_common.h \
  ../../../../../../components/softdevice/s132/headers/ble_types.h \
  ../../../../../../components/libraries/util/app_util.h \
  ../../../../../../components/softdevice/s132/headers/ble_gatt.h

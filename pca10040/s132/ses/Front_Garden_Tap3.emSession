@@ -28,7 +28,6 @@
   <ProjectSessionItem path="ble_app_front_garden_irrigation;front_garden_irrigation;Board Support"/>
   <ProjectSessionItem path="ble_app_front_garden_irrigation;front_garden_irrigation;nRF_BLE"/>
   <ProjectSessionItem path="ble_app_front_garden_irrigation;front_garden_irrigation;nRF_BLE_Services"/>
-  <ProjectSessionItem path="ble_app_front_garden_irrigation;front_garden_irrigation;nRF_DFU"/>
   <ProjectSessionItem path="ble_app_front_garden_irrigation;front_garden_irrigation;nRF_Drivers"/>
   <ProjectSessionItem path="ble_app_front_garden_irrigation;front_garden_irrigation;nRF_Libraries"/>
   <ProjectSessionItem path="ble_app_front_garden_irrigation;front_garden_irrigation;nRF_Log"/>

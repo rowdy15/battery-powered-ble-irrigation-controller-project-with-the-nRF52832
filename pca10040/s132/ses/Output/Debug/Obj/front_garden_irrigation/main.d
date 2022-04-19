@@ -1,14 +1,14 @@
 Output/Debug/Obj/front_garden_irrigation/main.o: \
- C:\nRF5_SDK_15.3.0_59ac345\examples\ble_peripheral\battery-powered-ble-irrigation-controller-project-with-the-nRF52832\main.c \
- C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 5.10b/include/stdint.h \
- C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 5.10b/include/string.h \
- C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 5.10b/include/__crossworks.h \
- ../../../../../../components/libraries/bootloader/ble_dfu/nrf_dfu_ble_svci_bond_sharing.h \
- C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 5.10b/include/stdbool.h \
+ /home/sam/nRF5_SDK_15.3.0_59ac345/examples/ble_peripheral/battery-powered-ble-irrigation-controller-project-with-the-nRF52832/main.c \
+ /usr/share/segger_embedded_studio_for_arm_5.10b/include/stdint.h \
+ /usr/share/segger_embedded_studio_for_arm_5.10b/include/string.h \
+ /usr/share/segger_embedded_studio_for_arm_5.10b/include/__crossworks.h \
+ ../../../../../../components/libraries/svc/nrf_svci_async_function.h \
  ../../../../../../components/libraries/svc/nrf_svci.h \
  ../../../../../../modules/nrfx/mdk/compiler_abstraction.h \
  ../../../../../../components/libraries/util/app_util.h \
- C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 5.10b/include/stddef.h \
+ /usr/share/segger_embedded_studio_for_arm_5.10b/include/stdbool.h \
+ /usr/share/segger_embedded_studio_for_arm_5.10b/include/stddef.h \
  ../../../../../../components/libraries/util/nordic_common.h \
  ../../../../../../modules/nrfx/mdk/nrf.h \
  ../../../../../../modules/nrfx/mdk/nrf52.h \
@@ -22,44 +22,21 @@ Output/Debug/Obj/front_garden_irrigation/main.o: \
  ../../../../../../modules/nrfx/mdk/nrf51_to_nrf52.h \
  ../../../../../../modules/nrfx/mdk/nrf52_name_change.h \
  ../../../../../../modules/nrfx/mdk/compiler_abstraction.h \
- ../../../../../../external/segger_rtt/SEGGER_RTT.h \
- ../../../../../../external/segger_rtt/SEGGER_RTT_Conf.h \
+ ../../../../../../components/softdevice/s132/headers/nrf52/nrf_mbr.h \
+ ../../../../../../components/softdevice/s132/headers/nrf_svc.h \
+ ../../../../../../components/libraries/svc/nrf_svci_async_handler.h \
+ ../../../../../../components/libraries/svc/nrf_svc_function.h \
+ ../../../../../../components/libraries/experimental_section_vars/nrf_section.h \
  ../../../../../../components/libraries/util/nordic_common.h \
- ../../../../../../components/libraries/util/app_util_platform.h \
+ ../../../../../../components/libraries/svc/nrf_svci_async_handler.h \
  ../../../../../../components/softdevice/s132/headers/nrf_soc.h \
  ../../../../../../components/softdevice/s132/headers/nrf_svc.h \
  ../../../../../../components/softdevice/s132/headers/nrf_error.h \
  ../../../../../../components/softdevice/s132/headers/nrf_error_soc.h \
- ../../../../../../components/softdevice/s132/headers/nrf_nvic.h \
- ../../../../../../components/libraries/util/nrf_assert.h \
- ../../../../../../components/libraries/util/app_error.h \
- C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 5.10b/include/stdio.h \
- ../../../../../../components/libraries/util/sdk_errors.h \
- ../../../../../../components/softdevice/s132/headers/nrf_error.h \
- ../../../../../../components/libraries/util/app_error_weak.h \
- ../config/sdk_config.h \
- ../../../../../../components/softdevice/s132/headers/nrf52/nrf_mbr.h \
- ../../../../../../components/softdevice/s132/headers/nrf_svc.h \
- ../../../../../../components/libraries/svc/nrf_svci_async_function.h \
- ../../../../../../components/libraries/svc/nrf_svci.h \
- ../../../../../../components/libraries/svc/nrf_svci_async_handler.h \
- ../../../../../../components/libraries/svc/nrf_svc_function.h \
- ../../../../../../components/libraries/experimental_section_vars/nrf_section.h \
- ../../../../../../components/libraries/bootloader/dfu/nrf_dfu_types.h \
- ../../../../../../components/libraries/util/sdk_common.h \
- ../../../../../../components/libraries/util/sdk_os.h \
- ../../../../../../components/libraries/util/app_util.h \
- ../../../../../../components/libraries/util/sdk_macros.h \
- ../../../../../../components/softdevice/s132/headers/ble_gap.h \
- ../../../../../../components/softdevice/s132/headers/ble_hci.h \
- ../../../../../../components/softdevice/s132/headers/ble_ranges.h \
- ../../../../../../components/softdevice/s132/headers/ble_types.h \
- ../../../../../../components/softdevice/s132/headers/ble_err.h \
- ../../../../../../components/libraries/svc/nrf_svci_async_handler.h \
  ../../../../../../integration/nrfx/legacy/nrf_drv_saadc.h \
  ../../../../../../modules/nrfx/drivers/include/nrfx_saadc.h \
  ../../../../../../modules/nrfx/nrfx.h \
- ../../../../../../integration/nrfx/nrfx_config.h \
+ ../../../../../../integration/nrfx/nrfx_config.h ../config/sdk_config.h \
  ../../../../../../modules/nrfx/drivers/nrfx_common.h \
  ../../../../../../modules/nrfx/mdk/nrf_peripherals.h \
  ../../../../../../modules/nrfx/mdk/nrf52832_peripherals.h \
@@ -68,6 +45,14 @@ Output/Debug/Obj/front_garden_irrigation/main.o: \
  ../../../../../../modules/nrfx/soc/nrfx_irqs.h \
  ../../../../../../modules/nrfx/soc/nrfx_irqs_nrf52832.h \
  ../../../../../../components/libraries/util/nrf_assert.h \
+ ../../../../../../components/libraries/util/app_util_platform.h \
+ ../../../../../../components/softdevice/s132/headers/nrf_nvic.h \
+ ../../../../../../components/libraries/util/nrf_assert.h \
+ ../../../../../../components/libraries/util/app_error.h \
+ /usr/share/segger_embedded_studio_for_arm_5.10b/include/stdio.h \
+ ../../../../../../components/libraries/util/sdk_errors.h \
+ ../../../../../../components/softdevice/s132/headers/nrf_error.h \
+ ../../../../../../components/libraries/util/app_error_weak.h \
  ../../../../../../modules/nrfx/soc/nrfx_coredep.h \
  ../../../../../../modules/nrfx/soc/nrfx_atomic.h \
  ../../../../../../components/libraries/util/sdk_errors.h \
@@ -77,7 +62,11 @@ Output/Debug/Obj/front_garden_irrigation/main.o: \
  ../../../../../../modules/nrfx/hal/nrf_saadc.h \
  ../../../../../../components/libraries/util/app_error.h \
  ../../../../../../components/softdevice/s132/headers/ble.h \
+ ../../../../../../components/softdevice/s132/headers/ble_err.h \
  ../../../../../../components/softdevice/s132/headers/ble_gap.h \
+ ../../../../../../components/softdevice/s132/headers/ble_hci.h \
+ ../../../../../../components/softdevice/s132/headers/ble_ranges.h \
+ ../../../../../../components/softdevice/s132/headers/ble_types.h \
  ../../../../../../components/softdevice/s132/headers/ble_l2cap.h \
  ../../../../../../components/softdevice/s132/headers/ble_gatt.h \
  ../../../../../../components/softdevice/s132/headers/ble_gattc.h \
@@ -86,8 +75,13 @@ Output/Debug/Obj/front_garden_irrigation/main.o: \
  ../../../../../../components/softdevice/s132/headers/ble_hci.h \
  ../../../../../../components/ble/common/ble_srv_common.h \
  ../../../../../../components/softdevice/s132/headers/ble_types.h \
+ ../../../../../../components/softdevice/s132/headers/ble_gap.h \
  ../../../../../../components/softdevice/s132/headers/ble_gatt.h \
  ../../../../../../components/ble/common/ble_advdata.h \
+ ../../../../../../components/libraries/util/sdk_common.h \
+ ../../../../../../components/libraries/util/sdk_os.h \
+ ../../../../../../components/libraries/util/app_util.h \
+ ../../../../../../components/libraries/util/sdk_macros.h \
  ../../../../../../components/ble/ble_services/ble_bas/ble_bas.h \
  ../../../../../../components/softdevice/common/nrf_sdh_ble.h \
  ../../../../../../components/libraries/experimental_section_vars/nrf_section_iter.h \
@@ -121,6 +115,8 @@ Output/Debug/Obj/front_garden_irrigation/main.o: \
  ../../../../../../components/libraries/bootloader/nrf_bootloader_info.h \
  ../../../../../../components/ble/nrf_ble_qwr/nrf_ble_qwr.h \
  ../../../../../../components/libraries/pwr_mgmt/nrf_pwr_mgmt.h \
+ ../../../../../../external/segger_rtt/SEGGER_RTT.h \
+ ../../../../../../external/segger_rtt/SEGGER_RTT_Conf.h \
  ../../../../../../components/libraries/fds/fds.h \
  ../../../../../../components/softdevice/s132/headers/nrf_sdm.h \
  ../../../../../../components/softdevice/s132/headers/nrf_error_sdm.h \
@@ -139,12 +135,12 @@ Output/Debug/Obj/front_garden_irrigation/main.o: \
  ../../../../../../components/libraries/log/src/nrf_log_ctrl_internal.h \
  ../../../../../../components/libraries/log/nrf_log_backend_interface.h \
  ../../../../../../components/libraries/memobj/nrf_memobj.h \
- C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 5.10b/include/stdlib.h \
+ /usr/share/segger_embedded_studio_for_arm_5.10b/include/stdlib.h \
  ../../../../../../components/libraries/balloc/nrf_balloc.h \
  ../../../../../../components/libraries/log/nrf_log_default_backends.h \
  ../../../../../../modules/nrfx/hal/nrf_power.h \
  ../../../../../../components/libraries/bsp/bsp_btn_ble.h \
  ../../../../../../components/libraries/bsp/bsp.h \
  ../../../../../../components/libraries/button/app_button.h \
- C:\nRF5_SDK_15.3.0_59ac345\examples\ble_peripheral\battery-powered-ble-irrigation-controller-project-with-the-nRF52832\ble_cus.h \
- C:\nRF5_SDK_15.3.0_59ac345\examples\ble_peripheral\battery-powered-ble-irrigation-controller-project-with-the-nRF52832\ble_opt.h
+ /home/sam/nRF5_SDK_15.3.0_59ac345/examples/ble_peripheral/battery-powered-ble-irrigation-controller-project-with-the-nRF52832/ble_cus.h \
+ /home/sam/nRF5_SDK_15.3.0_59ac345/examples/ble_peripheral/battery-powered-ble-irrigation-controller-project-with-the-nRF52832/ble_opt.h

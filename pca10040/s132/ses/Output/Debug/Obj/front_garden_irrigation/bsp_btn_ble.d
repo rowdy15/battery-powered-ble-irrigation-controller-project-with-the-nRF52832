@@ -1,7 +1,7 @@
 Output/Debug/Obj/front_garden_irrigation/bsp_btn_ble.o: \
- C:\nRF5_SDK_15.3.0_59ac345\components\libraries\bsp\bsp_btn_ble.c \
- C:\nRF5_SDK_15.3.0_59ac345\components\libraries\bsp\bsp_btn_ble.h \
- C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 5.10b/include/stdint.h \
+ /home/sam/nRF5_SDK_15.3.0_59ac345/components/libraries/bsp/bsp_btn_ble.c \
+ /home/sam/nRF5_SDK_15.3.0_59ac345/components/libraries/bsp/bsp_btn_ble.h \
+ /usr/share/segger_embedded_studio_for_arm_5.10b/include/stdint.h \
  ../../../../../../components/softdevice/s132/headers/ble.h \
  ../../../../../../components/softdevice/s132/headers/nrf_svc.h \
  ../../../../../../components/softdevice/s132/headers/nrf_error.h \
@@ -26,15 +26,15 @@ Output/Debug/Obj/front_garden_irrigation/bsp_btn_ble.o: \
  ../../../../../../modules/nrfx/mdk/nrf52_name_change.h \
  ../../../../../../modules/nrfx/mdk/compiler_abstraction.h \
  ../../../../../../components/softdevice/s132/headers/ble_gatts.h \
- C:\nRF5_SDK_15.3.0_59ac345\components\libraries\bsp\bsp.h \
- C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 5.10b/include/stdbool.h \
+ /home/sam/nRF5_SDK_15.3.0_59ac345/components/libraries/bsp/bsp.h \
+ /usr/share/segger_embedded_studio_for_arm_5.10b/include/stdbool.h \
  ../../../../../../components/boards/boards.h \
  ../../../../../../modules/nrfx/hal/nrf_gpio.h \
  ../../../../../../modules/nrfx/nrfx.h \
  ../../../../../../integration/nrfx/nrfx_config.h ../config/sdk_config.h \
  ../../../../../../modules/nrfx/drivers/nrfx_common.h \
- C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 5.10b/include/stddef.h \
- C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 5.10b/include/__crossworks.h \
+ /usr/share/segger_embedded_studio_for_arm_5.10b/include/stddef.h \
+ /usr/share/segger_embedded_studio_for_arm_5.10b/include/__crossworks.h \
  ../../../../../../modules/nrfx/mdk/nrf_peripherals.h \
  ../../../../../../modules/nrfx/mdk/nrf52832_peripherals.h \
  ../../../../../../integration/nrfx/nrfx_glue.h \
@@ -45,8 +45,8 @@ Output/Debug/Obj/front_garden_irrigation/bsp_btn_ble.o: \
  ../../../../../../components/libraries/util/app_util.h \
  ../../../../../../modules/nrfx/mdk/compiler_abstraction.h \
  ../../../../../../components/libraries/util/nordic_common.h \
- ../../../../../../external/segger_rtt/SEGGER_RTT.h \
- ../../../../../../external/segger_rtt/SEGGER_RTT_Conf.h \
+ ../../../../../../components/softdevice/s132/headers/nrf52/nrf_mbr.h \
+ ../../../../../../components/softdevice/s132/headers/nrf_svc.h \
  ../../../../../../components/libraries/util/nordic_common.h \
  ../../../../../../components/libraries/util/app_util_platform.h \
  ../../../../../../components/softdevice/s132/headers/nrf_soc.h \
@@ -54,12 +54,10 @@ Output/Debug/Obj/front_garden_irrigation/bsp_btn_ble.o: \
  ../../../../../../components/softdevice/s132/headers/nrf_nvic.h \
  ../../../../../../components/libraries/util/nrf_assert.h \
  ../../../../../../components/libraries/util/app_error.h \
- C:/Program\ Files/SEGGER/SEGGER\ Embedded\ Studio\ for\ ARM\ 5.10b/include/stdio.h \
+ /usr/share/segger_embedded_studio_for_arm_5.10b/include/stdio.h \
  ../../../../../../components/libraries/util/sdk_errors.h \
  ../../../../../../components/softdevice/s132/headers/nrf_error.h \
  ../../../../../../components/libraries/util/app_error_weak.h \
- ../../../../../../components/softdevice/s132/headers/nrf52/nrf_mbr.h \
- ../../../../../../components/softdevice/s132/headers/nrf_svc.h \
  ../../../../../../modules/nrfx/soc/nrfx_coredep.h \
  ../../../../../../modules/nrfx/soc/nrfx_atomic.h \
  ../../../../../../components/libraries/util/sdk_errors.h \
@@ -71,4 +69,6 @@ Output/Debug/Obj/front_garden_irrigation/bsp_btn_ble.o: \
  ../../../../../../components/libraries/util/app_error.h \
  ../../../../../../components/softdevice/common/nrf_sdh_ble.h \
  ../../../../../../components/libraries/experimental_section_vars/nrf_section_iter.h \
- ../../../../../../components/libraries/experimental_section_vars/nrf_section.h
+ ../../../../../../components/libraries/experimental_section_vars/nrf_section.h \
+ ../../../../../../external/segger_rtt/SEGGER_RTT.h \
+ ../../../../../../external/segger_rtt/SEGGER_RTT_Conf.h

@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include <string.h>
 
-#include "nrf_dfu_ble_svci_bond_sharing.h"
+//#include "nrf_dfu_ble_svci_bond_sharing.h"
 #include "nrf_svci_async_function.h"
 #include "nrf_svci_async_handler.h"
 
@@ -48,7 +48,7 @@
 #include "nrf_log_ctrl.h"
 #include "nrf_log_default_backends.h"
 
-#include "ble_dfu.h"
+//#include "ble_dfu.h"
 #include "nrf_power.h"
 
 /*
@@ -75,15 +75,15 @@ NVIC_SystemReset();                  ////
 #include "ble_opt.h"
 
 #define DEVICE_NAME                     "Front_Garden"                         /**< Name of device. Will be included in the advertising data. */
-
+#define TX_POWER_LEVEL                  4
 #define APP_BLE_OBSERVER_PRIO           3                                       /**< Application's BLE observer priority. You shouldn't need to modify this value. */
 #define APP_BLE_CONN_CFG_TAG            1                                       /**< A tag identifying the SoftDevice BLE configuration. */
 
-#define BATTERY_LEVEL_MEAS_INTERVAL_5_MIN        APP_TIMER_TICKS(3000)   //5 minutes   /**< Battery level measurement interval (ticks). This value corresponds to 60 minutes. */
+#define BATTERY_LEVEL_MEAS_INTERVAL_5_MIN        APP_TIMER_TICKS(60000) //for some reason 60000 is 5 min for this????   //5 minutes   /**< Battery level measurement interval (ticks). This value corresponds to 60 minutes. */
 #define CUSTOM_SERVICE_NOTIFICATION_INTERVAL     APP_TIMER_TICKS(60000) 
 
-#define APP_ADV_FAST_INTERVAL           MSEC_TO_UNITS(200, UNIT_1_25_MS)  // 500 ms                       /**< Fast advertising interval (in units of 0.625 ms. This value corresponds to 25 ms.). */
-#define APP_ADV_SLOW_INTERVAL           MSEC_TO_UNITS(500, UNIT_1_25_MS)  // 7 secs  ~= 3.3 uA                   /**< Slow advertising interval (in units of 0.625 ms. This value corresponds to 100 ms.). */
+#define APP_ADV_FAST_INTERVAL           MSEC_TO_UNITS(400, UNIT_1_25_MS)  // 500 ms                       /**< Fast advertising interval (in units of 0.625 ms. This value corresponds to 25 ms.). */
+#define APP_ADV_SLOW_INTERVAL           MSEC_TO_UNITS(800, UNIT_1_25_MS)  // 7 secs  ~= 3.3 uA                   /**< Slow advertising interval (in units of 0.625 ms. This value corresponds to 100 ms.). */
 
 #define APP_ADV_FAST_DURATION           MSEC_TO_UNITS(50000, UNIT_10_MS)                                        /**< The advertising duration of fast advertising in units of 10 milliseconds. */
 #define APP_ADV_SLOW_DURATION           0                                       /**< The advertising duration of slow advertising in units of 10 milliseconds. 0 means indefinitely. */
@@ -92,7 +92,7 @@ NVIC_SystemReset();                  ////
 //#define MAX_CONN_INTERVAL               BLE_GAP_CP_MAX_CONN_INTVL_MAX         /**< Maximum acceptable connection interval (4 second). */
 #define MAX_CONN_INTERVAL               MSEC_TO_UNITS(200, UNIT_1_25_MS)//~= 3.3 uA/
 
-#define SLAVE_LATENCY                   6                                       /**< Slave latency. */
+#define SLAVE_LATENCY                   3                                       /**< Slave latency. */
 #define CONN_SUP_TIMEOUT                BLE_GAP_CP_CONN_SUP_TIMEOUT_MAX         /**< Connection supervisory time-out (32 seconds). */
 
 #define FIRST_CONN_PARAMS_UPDATE_DELAY  APP_TIMER_TICKS(15000)                  /**< Time from initiating event (connect or start of notification) to first time sd_ble_gap_conn_param_update is called (15 seconds). */
@@ -439,8 +439,8 @@ void saadc_event_handler(nrf_drv_saadc_evt_t const * p_event)
         batt_lvl_in_milli_volts = ADC_RESULT_IN_MILLI_VOLTS(adc_result) +
                                   DIODE_FWD_VOLT_DROP_MILLIVOLTS;
         percentage_batt_lvl = battery_level_in_percent(batt_lvl_in_milli_volts);
-        //SEGGER_RTT_printf(0,"the battery level in percent is: %d\n", percentage_batt_lvl);
-        err_code = ble_bas_battery_level_update(&m_bas, percentage_batt_lvl, BLE_CONN_HANDLE_ALL,m_battery_conn_handle);
+        SEGGER_RTT_printf(0,"the battery level in percent is: %d\n", percentage_batt_lvl);
+        err_code = ble_bas_battery_level_update(&m_bas, percentage_batt_lvl, BLE_CONN_HANDLE_ALL/*,m_battery_conn_handle*/);
         if ((err_code != NRF_SUCCESS) //&&
             //(err_code != NRF_ERROR_INVALID_STATE) &&
             //(err_code != NRF_ERROR_RESOURCES) &&
@@ -487,7 +487,7 @@ static void battery_level_meas_timeout_handler(void * p_context)
 {
     //SEGGER_RTT_WriteString(0,"im in battery_level_meas_timeout_handler function \n");
     battery_level_measure_interval_counter++;
-    if (battery_level_measure_interval_counter == battery_measure_interval){
+    if (battery_level_measure_interval_counter >= battery_measure_interval){
     SEGGER_RTT_WriteString(0,"and the battery level will be measured.\n");
     UNUSED_PARAMETER(p_context);
     ret_code_t err_code;
@@ -627,31 +627,58 @@ static void on_opt_evt(ble_option_t * p_opt_service, ble_opt_evt_t * p_evt)
     switch(p_evt->evt_type)
     {
         case BLE_OPT_BAT_CHECK_1_MIN:
-            battery_level_measure_interval_counter = 1;
+            err_code = app_timer_stop(m_battery_timer_id);
+            APP_ERROR_CHECK(err_code);
+            battery_level_measure_interval_counter = 1; // the number of times that 5 mins is run
+            err_code = app_timer_start(m_battery_timer_id, BATTERY_LEVEL_MEAS_INTERVAL_5_MIN, NULL);
+            APP_ERROR_CHECK(err_code);
             SEGGER_RTT_WriteString(0,"battery read frequency was changed to 5 min!\n");
             break;
         case BLE_OPT_BAT_CHECK_10_MIN:
-            battery_level_measure_interval_counter = 2;
+            err_code = app_timer_stop(m_battery_timer_id);
+            APP_ERROR_CHECK(err_code);
+            battery_level_measure_interval_counter = 2; // the number of times that 5 mins is run
+            err_code = app_timer_start(m_battery_timer_id, BATTERY_LEVEL_MEAS_INTERVAL_5_MIN, NULL);
+            APP_ERROR_CHECK(err_code);
             SEGGER_RTT_WriteString(0,"battery read frequency was changed to 10 min!\n");
             break;
         case BLE_OPT_BAT_CHECK_30_MIN:
-            battery_level_measure_interval_counter = 6;
+            err_code = app_timer_stop(m_battery_timer_id);
+            APP_ERROR_CHECK(err_code);
+            battery_level_measure_interval_counter = 6; // the number of times that 5 mins is run
+            err_code = app_timer_start(m_battery_timer_id, BATTERY_LEVEL_MEAS_INTERVAL_5_MIN, NULL);
+            APP_ERROR_CHECK(err_code);
             SEGGER_RTT_WriteString(0,"battery read frequency was changed to 30 min!\n");
             break;
         case BLE_OPT_BAT_CHECK_1_HR:
-            battery_level_measure_interval_counter = 12;
+            err_code = app_timer_stop(m_battery_timer_id);
+            APP_ERROR_CHECK(err_code);
+            battery_level_measure_interval_counter = 12; // the number of times that 5 mins is run
+            err_code = app_timer_start(m_battery_timer_id, BATTERY_LEVEL_MEAS_INTERVAL_5_MIN, NULL);
+            APP_ERROR_CHECK(err_code);
             SEGGER_RTT_WriteString(0,"battery read frequency was changed to 1 hour!\n");
             break;
-        case BLE_OPT_BAT_CHECK_6_HR:
-            battery_level_measure_interval_counter = 72;
+            err_code = app_timer_stop(m_battery_timer_id);
+            APP_ERROR_CHECK(err_code);
+            battery_level_measure_interval_counter = 72; // the number of times that 5 mins is run
+            err_code = app_timer_start(m_battery_timer_id, BATTERY_LEVEL_MEAS_INTERVAL_5_MIN, NULL);
+            APP_ERROR_CHECK(err_code);
             SEGGER_RTT_WriteString(0,"battery read frequency was changed to 6 hours!\n");
             break;
         case BLE_OPT_BAT_CHECK_12_HR:
-            battery_level_measure_interval_counter = 144;
+            err_code = app_timer_stop(m_battery_timer_id);
+            APP_ERROR_CHECK(err_code);
+            battery_level_measure_interval_counter = 144; // the number of times that 5 mins is run
+            err_code = app_timer_start(m_battery_timer_id, BATTERY_LEVEL_MEAS_INTERVAL_5_MIN, NULL);
+            APP_ERROR_CHECK(err_code);
             SEGGER_RTT_WriteString(0,"battery read frequency was changed to 12 hours!\n");
             break;
         case BLE_OPT_BAT_CHECK_24_HR:
-            battery_level_measure_interval_counter = 288;
+            err_code = app_timer_stop(m_battery_timer_id);
+            APP_ERROR_CHECK(err_code);
+            battery_level_measure_interval_counter = 288; // the number of times that 5 mins is run
+            err_code = app_timer_start(m_battery_timer_id, BATTERY_LEVEL_MEAS_INTERVAL_5_MIN, NULL);
+            APP_ERROR_CHECK(err_code);
             SEGGER_RTT_WriteString(0,"battery read frequency was changed to 24 hours!\n");
             break;
         case BLE_OPT_EVT_CONNECTED:
@@ -1339,15 +1366,12 @@ int main(void)
     advertising_init(); 
     peer_manager_init();
     advertising_start(erase_bonds);    
-    SEGGER_RTT_WriteString(0, "Hello World!\n");
+    SEGGER_RTT_WriteString(0, "Doing first battery Read\n");
 
-    err_code = sd_ble_gap_tx_power_set(BLE_GAP_TX_POWER_ROLE_CONN, m_advertising.adv_handle, 4); 
-    APP_ERROR_CHECK(err_code); 
-
-    //adc_configure();
-    //err_code = nrf_drv_saadc_sample();
-    //APP_ERROR_CHECK(err_code);
-
+    adc_configure();
+    err_code = nrf_drv_saadc_sample();
+    APP_ERROR_CHECK(err_code);
+    SEGGER_RTT_WriteString(0, "Entering main loop\n");
     // Enter main loop.
     for (;;)
     {
